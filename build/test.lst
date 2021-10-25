@@ -1,0 +1,1214 @@
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"test.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.TestLines,"ax",%progbits
+  16              		.align	1
+  17              		.global	TestLines
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	TestLines:
+  25              	.LFB65:
+  26              		.file 1 "Core/Src/test.c"
+   1:Core/Src/test.c **** /*
+   2:Core/Src/test.c ****  * test.c
+   3:Core/Src/test.c ****  *
+   4:Core/Src/test.c ****  *  Created on: 17-Jun-2019
+   5:Core/Src/test.c ****  *      Author: poe
+   6:Core/Src/test.c ****  */
+   7:Core/Src/test.c **** 
+   8:Core/Src/test.c **** #include "test.h"
+   9:Core/Src/test.c **** #include "ssd1306.h"
+  10:Core/Src/test.c **** 
+  11:Core/Src/test.c **** #define min(a, b) (((a) < (b)) ? (a) : (b))
+  12:Core/Src/test.c **** 
+  13:Core/Src/test.c **** void TestLines(uint8_t color)
+  14:Core/Src/test.c **** {
+  27              		.loc 1 14 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 16
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 90B5     		push	{r4, r7, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 12
+  34              		.cfi_offset 4, -12
+  35              		.cfi_offset 7, -8
+  36              		.cfi_offset 14, -4
+  37 0002 87B0     		sub	sp, sp, #28
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 40
+  40 0004 02AF     		add	r7, sp, #8
+  41              	.LCFI2:
+  42              		.cfi_def_cfa 7, 32
+  43 0006 0346     		mov	r3, r0
+  44 0008 FB71     		strb	r3, [r7, #7]
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 2
+
+
+  15:Core/Src/test.c ****     uint8_t x1, y1, x2, y2;
+  16:Core/Src/test.c **** 
+  17:Core/Src/test.c ****     SSD1306_Clear ();
+  45              		.loc 1 17 5
+  46 000a FFF7FEFF 		bl	SSD1306_Clear
+  18:Core/Src/test.c **** 
+  19:Core/Src/test.c ****     x1 = y1 = 0;
+  47              		.loc 1 19 13
+  48 000e 0023     		movs	r3, #0
+  49 0010 7B73     		strb	r3, [r7, #13]
+  50              		.loc 1 19 8
+  51 0012 7B7B     		ldrb	r3, [r7, #13]
+  52 0014 3B73     		strb	r3, [r7, #12]
+  20:Core/Src/test.c ****     y2    = SSD1306_HEIGHT - 1;
+  53              		.loc 1 20 11
+  54 0016 3F23     		movs	r3, #63
+  55 0018 BB73     		strb	r3, [r7, #14]
+  21:Core/Src/test.c ****     for (x2 = 0; x2 < SSD1306_WIDTH; x2 += 6)
+  56              		.loc 1 21 13
+  57 001a 0023     		movs	r3, #0
+  58 001c FB73     		strb	r3, [r7, #15]
+  59              		.loc 1 21 5
+  60 001e 14E0     		b	.L2
+  61              	.L3:
+  22:Core/Src/test.c ****     	{
+  23:Core/Src/test.c ****     		SSD1306_DrawLine(x1, y1, x2, y2, color);
+  62              		.loc 1 23 7 discriminator 3
+  63 0020 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+  64 0022 98B2     		uxth	r0, r3
+  65 0024 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+  66 0026 99B2     		uxth	r1, r3
+  67 0028 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+  68 002a 9AB2     		uxth	r2, r3
+  69 002c BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+  70 002e 9CB2     		uxth	r4, r3
+  71 0030 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  72 0032 0093     		str	r3, [sp]
+  73 0034 2346     		mov	r3, r4
+  74 0036 FFF7FEFF 		bl	SSD1306_DrawLine
+  24:Core/Src/test.c ****     		HAL_Delay(1);
+  75              		.loc 1 24 7 discriminator 3
+  76 003a 0120     		movs	r0, #1
+  77 003c FFF7FEFF 		bl	HAL_Delay
+  25:Core/Src/test.c ****     		SSD1306_UpdateScreen();
+  78              		.loc 1 25 7 discriminator 3
+  79 0040 FFF7FEFF 		bl	SSD1306_UpdateScreen
+  21:Core/Src/test.c ****     	{
+  80              		.loc 1 21 41 discriminator 3
+  81 0044 FB7B     		ldrb	r3, [r7, #15]
+  82 0046 0633     		adds	r3, r3, #6
+  83 0048 FB73     		strb	r3, [r7, #15]
+  84              	.L2:
+  21:Core/Src/test.c ****     	{
+  85              		.loc 1 21 21 discriminator 1
+  86 004a 97F90F30 		ldrsb	r3, [r7, #15]
+  21:Core/Src/test.c ****     	{
+  87              		.loc 1 21 5 discriminator 1
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 3
+
+
+  88 004e 002B     		cmp	r3, #0
+  89 0050 E6DA     		bge	.L3
+  26:Core/Src/test.c ****     	}
+  27:Core/Src/test.c ****     x2    = SSD1306_WIDTH - 1;
+  90              		.loc 1 27 11
+  91 0052 7F23     		movs	r3, #127
+  92 0054 FB73     		strb	r3, [r7, #15]
+  28:Core/Src/test.c ****     for (y2 = 0; y2 < SSD1306_HEIGHT; y2 += 6)
+  93              		.loc 1 28 13
+  94 0056 0023     		movs	r3, #0
+  95 0058 BB73     		strb	r3, [r7, #14]
+  96              		.loc 1 28 5
+  97 005a 14E0     		b	.L4
+  98              	.L5:
+  29:Core/Src/test.c ****     	{
+  30:Core/Src/test.c ****     		SSD1306_DrawLine(x1, y1, x2, y2, color);
+  99              		.loc 1 30 7 discriminator 3
+ 100 005c 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 101 005e 98B2     		uxth	r0, r3
+ 102 0060 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 103 0062 99B2     		uxth	r1, r3
+ 104 0064 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 105 0066 9AB2     		uxth	r2, r3
+ 106 0068 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 107 006a 9CB2     		uxth	r4, r3
+ 108 006c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 109 006e 0093     		str	r3, [sp]
+ 110 0070 2346     		mov	r3, r4
+ 111 0072 FFF7FEFF 		bl	SSD1306_DrawLine
+  31:Core/Src/test.c ****     		HAL_Delay(1);
+ 112              		.loc 1 31 7 discriminator 3
+ 113 0076 0120     		movs	r0, #1
+ 114 0078 FFF7FEFF 		bl	HAL_Delay
+  32:Core/Src/test.c ****     		SSD1306_UpdateScreen();
+ 115              		.loc 1 32 7 discriminator 3
+ 116 007c FFF7FEFF 		bl	SSD1306_UpdateScreen
+  28:Core/Src/test.c ****     	{
+ 117              		.loc 1 28 42 discriminator 3
+ 118 0080 BB7B     		ldrb	r3, [r7, #14]
+ 119 0082 0633     		adds	r3, r3, #6
+ 120 0084 BB73     		strb	r3, [r7, #14]
+ 121              	.L4:
+  28:Core/Src/test.c ****     	{
+ 122              		.loc 1 28 5 discriminator 1
+ 123 0086 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 124 0088 3F2B     		cmp	r3, #63
+ 125 008a E7D9     		bls	.L5
+  33:Core/Src/test.c ****     	}
+  34:Core/Src/test.c **** 
+  35:Core/Src/test.c ****     HAL_Delay(10);
+ 126              		.loc 1 35 5
+ 127 008c 0A20     		movs	r0, #10
+ 128 008e FFF7FEFF 		bl	HAL_Delay
+  36:Core/Src/test.c **** 
+  37:Core/Src/test.c **** 
+  38:Core/Src/test.c ****     SSD1306_Clear ();
+ 129              		.loc 1 38 5
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 4
+
+
+ 130 0092 FFF7FEFF 		bl	SSD1306_Clear
+  39:Core/Src/test.c **** 
+  40:Core/Src/test.c ****     x1    = SSD1306_WIDTH - 1;
+ 131              		.loc 1 40 11
+ 132 0096 7F23     		movs	r3, #127
+ 133 0098 3B73     		strb	r3, [r7, #12]
+  41:Core/Src/test.c ****     y1    = 0;
+ 134              		.loc 1 41 11
+ 135 009a 0023     		movs	r3, #0
+ 136 009c 7B73     		strb	r3, [r7, #13]
+  42:Core/Src/test.c ****     y2    = SSD1306_HEIGHT - 1;
+ 137              		.loc 1 42 11
+ 138 009e 3F23     		movs	r3, #63
+ 139 00a0 BB73     		strb	r3, [r7, #14]
+  43:Core/Src/test.c ****     for (x2 = 0; x2 < SSD1306_WIDTH; x2 += 6)
+ 140              		.loc 1 43 13
+ 141 00a2 0023     		movs	r3, #0
+ 142 00a4 FB73     		strb	r3, [r7, #15]
+ 143              		.loc 1 43 5
+ 144 00a6 14E0     		b	.L6
+ 145              	.L7:
+  44:Core/Src/test.c ****     	{
+  45:Core/Src/test.c ****     		SSD1306_DrawLine(x1, y1, x2, y2, color);
+ 146              		.loc 1 45 7 discriminator 3
+ 147 00a8 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 148 00aa 98B2     		uxth	r0, r3
+ 149 00ac 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 150 00ae 99B2     		uxth	r1, r3
+ 151 00b0 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 152 00b2 9AB2     		uxth	r2, r3
+ 153 00b4 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 154 00b6 9CB2     		uxth	r4, r3
+ 155 00b8 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 156 00ba 0093     		str	r3, [sp]
+ 157 00bc 2346     		mov	r3, r4
+ 158 00be FFF7FEFF 		bl	SSD1306_DrawLine
+  46:Core/Src/test.c ****     		SSD1306_UpdateScreen();
+ 159              		.loc 1 46 7 discriminator 3
+ 160 00c2 FFF7FEFF 		bl	SSD1306_UpdateScreen
+  47:Core/Src/test.c ****     		HAL_Delay(1);
+ 161              		.loc 1 47 7 discriminator 3
+ 162 00c6 0120     		movs	r0, #1
+ 163 00c8 FFF7FEFF 		bl	HAL_Delay
+  43:Core/Src/test.c ****     	{
+ 164              		.loc 1 43 41 discriminator 3
+ 165 00cc FB7B     		ldrb	r3, [r7, #15]
+ 166 00ce 0633     		adds	r3, r3, #6
+ 167 00d0 FB73     		strb	r3, [r7, #15]
+ 168              	.L6:
+  43:Core/Src/test.c ****     	{
+ 169              		.loc 1 43 21 discriminator 1
+ 170 00d2 97F90F30 		ldrsb	r3, [r7, #15]
+  43:Core/Src/test.c ****     	{
+ 171              		.loc 1 43 5 discriminator 1
+ 172 00d6 002B     		cmp	r3, #0
+ 173 00d8 E6DA     		bge	.L7
+  48:Core/Src/test.c ****     	}
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 5
+
+
+  49:Core/Src/test.c ****     x2    = 0;
+ 174              		.loc 1 49 11
+ 175 00da 0023     		movs	r3, #0
+ 176 00dc FB73     		strb	r3, [r7, #15]
+  50:Core/Src/test.c ****     for (y2 = 0; y2 < SSD1306_HEIGHT; y2 += 6)
+ 177              		.loc 1 50 13
+ 178 00de 0023     		movs	r3, #0
+ 179 00e0 BB73     		strb	r3, [r7, #14]
+ 180              		.loc 1 50 5
+ 181 00e2 14E0     		b	.L8
+ 182              	.L9:
+  51:Core/Src/test.c ****     	{
+  52:Core/Src/test.c ****     		SSD1306_DrawLine(x1, y1, x2, y2, color);
+ 183              		.loc 1 52 7 discriminator 3
+ 184 00e4 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 185 00e6 98B2     		uxth	r0, r3
+ 186 00e8 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 187 00ea 99B2     		uxth	r1, r3
+ 188 00ec FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 189 00ee 9AB2     		uxth	r2, r3
+ 190 00f0 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 191 00f2 9CB2     		uxth	r4, r3
+ 192 00f4 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 193 00f6 0093     		str	r3, [sp]
+ 194 00f8 2346     		mov	r3, r4
+ 195 00fa FFF7FEFF 		bl	SSD1306_DrawLine
+  53:Core/Src/test.c ****     		SSD1306_UpdateScreen();
+ 196              		.loc 1 53 7 discriminator 3
+ 197 00fe FFF7FEFF 		bl	SSD1306_UpdateScreen
+  54:Core/Src/test.c ****     		HAL_Delay(1);
+ 198              		.loc 1 54 7 discriminator 3
+ 199 0102 0120     		movs	r0, #1
+ 200 0104 FFF7FEFF 		bl	HAL_Delay
+  50:Core/Src/test.c ****     	{
+ 201              		.loc 1 50 42 discriminator 3
+ 202 0108 BB7B     		ldrb	r3, [r7, #14]
+ 203 010a 0633     		adds	r3, r3, #6
+ 204 010c BB73     		strb	r3, [r7, #14]
+ 205              	.L8:
+  50:Core/Src/test.c ****     	{
+ 206              		.loc 1 50 5 discriminator 1
+ 207 010e BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 208 0110 3F2B     		cmp	r3, #63
+ 209 0112 E7D9     		bls	.L9
+  55:Core/Src/test.c ****     	}
+  56:Core/Src/test.c **** 
+  57:Core/Src/test.c ****     HAL_Delay(10);
+ 210              		.loc 1 57 5
+ 211 0114 0A20     		movs	r0, #10
+ 212 0116 FFF7FEFF 		bl	HAL_Delay
+  58:Core/Src/test.c **** 
+  59:Core/Src/test.c **** 
+  60:Core/Src/test.c ****     SSD1306_Clear ();
+ 213              		.loc 1 60 5
+ 214 011a FFF7FEFF 		bl	SSD1306_Clear
+  61:Core/Src/test.c **** 
+  62:Core/Src/test.c ****     x1    = 0;
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 6
+
+
+ 215              		.loc 1 62 11
+ 216 011e 0023     		movs	r3, #0
+ 217 0120 3B73     		strb	r3, [r7, #12]
+  63:Core/Src/test.c ****     y1    = SSD1306_HEIGHT - 1;
+ 218              		.loc 1 63 11
+ 219 0122 3F23     		movs	r3, #63
+ 220 0124 7B73     		strb	r3, [r7, #13]
+  64:Core/Src/test.c ****     y2    = 0;
+ 221              		.loc 1 64 11
+ 222 0126 0023     		movs	r3, #0
+ 223 0128 BB73     		strb	r3, [r7, #14]
+  65:Core/Src/test.c ****     for (x2 = 0; x2 < SSD1306_WIDTH; x2 += 6)
+ 224              		.loc 1 65 13
+ 225 012a 0023     		movs	r3, #0
+ 226 012c FB73     		strb	r3, [r7, #15]
+ 227              		.loc 1 65 5
+ 228 012e 14E0     		b	.L10
+ 229              	.L11:
+  66:Core/Src/test.c ****     {
+  67:Core/Src/test.c ****     	SSD1306_DrawLine(x1, y1, x2, y2, color);
+ 230              		.loc 1 67 6 discriminator 3
+ 231 0130 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 232 0132 98B2     		uxth	r0, r3
+ 233 0134 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 234 0136 99B2     		uxth	r1, r3
+ 235 0138 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 236 013a 9AB2     		uxth	r2, r3
+ 237 013c BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 238 013e 9CB2     		uxth	r4, r3
+ 239 0140 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 240 0142 0093     		str	r3, [sp]
+ 241 0144 2346     		mov	r3, r4
+ 242 0146 FFF7FEFF 		bl	SSD1306_DrawLine
+  68:Core/Src/test.c ****     	HAL_Delay(1);
+ 243              		.loc 1 68 6 discriminator 3
+ 244 014a 0120     		movs	r0, #1
+ 245 014c FFF7FEFF 		bl	HAL_Delay
+  69:Core/Src/test.c ****     	SSD1306_UpdateScreen();
+ 246              		.loc 1 69 6 discriminator 3
+ 247 0150 FFF7FEFF 		bl	SSD1306_UpdateScreen
+  65:Core/Src/test.c ****     {
+ 248              		.loc 1 65 41 discriminator 3
+ 249 0154 FB7B     		ldrb	r3, [r7, #15]
+ 250 0156 0633     		adds	r3, r3, #6
+ 251 0158 FB73     		strb	r3, [r7, #15]
+ 252              	.L10:
+  65:Core/Src/test.c ****     {
+ 253              		.loc 1 65 21 discriminator 1
+ 254 015a 97F90F30 		ldrsb	r3, [r7, #15]
+  65:Core/Src/test.c ****     {
+ 255              		.loc 1 65 5 discriminator 1
+ 256 015e 002B     		cmp	r3, #0
+ 257 0160 E6DA     		bge	.L11
+  70:Core/Src/test.c ****     }
+  71:Core/Src/test.c ****     x2    = SSD1306_WIDTH - 1;
+ 258              		.loc 1 71 11
+ 259 0162 7F23     		movs	r3, #127
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 7
+
+
+ 260 0164 FB73     		strb	r3, [r7, #15]
+  72:Core/Src/test.c ****     for (y2 = 0; y2 < SSD1306_HEIGHT; y2 += 6)
+ 261              		.loc 1 72 13
+ 262 0166 0023     		movs	r3, #0
+ 263 0168 BB73     		strb	r3, [r7, #14]
+ 264              		.loc 1 72 5
+ 265 016a 14E0     		b	.L12
+ 266              	.L13:
+  73:Core/Src/test.c ****     	{
+  74:Core/Src/test.c ****     		SSD1306_DrawLine(x1, y1, x2, y2, color);
+ 267              		.loc 1 74 7 discriminator 3
+ 268 016c 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 269 016e 98B2     		uxth	r0, r3
+ 270 0170 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 271 0172 99B2     		uxth	r1, r3
+ 272 0174 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 273 0176 9AB2     		uxth	r2, r3
+ 274 0178 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 275 017a 9CB2     		uxth	r4, r3
+ 276 017c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 277 017e 0093     		str	r3, [sp]
+ 278 0180 2346     		mov	r3, r4
+ 279 0182 FFF7FEFF 		bl	SSD1306_DrawLine
+  75:Core/Src/test.c ****     		HAL_Delay(1);
+ 280              		.loc 1 75 7 discriminator 3
+ 281 0186 0120     		movs	r0, #1
+ 282 0188 FFF7FEFF 		bl	HAL_Delay
+  76:Core/Src/test.c ****     		SSD1306_UpdateScreen();
+ 283              		.loc 1 76 7 discriminator 3
+ 284 018c FFF7FEFF 		bl	SSD1306_UpdateScreen
+  72:Core/Src/test.c ****     	{
+ 285              		.loc 1 72 42 discriminator 3
+ 286 0190 BB7B     		ldrb	r3, [r7, #14]
+ 287 0192 0633     		adds	r3, r3, #6
+ 288 0194 BB73     		strb	r3, [r7, #14]
+ 289              	.L12:
+  72:Core/Src/test.c ****     	{
+ 290              		.loc 1 72 5 discriminator 1
+ 291 0196 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 292 0198 3F2B     		cmp	r3, #63
+ 293 019a E7D9     		bls	.L13
+  77:Core/Src/test.c ****     	}
+  78:Core/Src/test.c **** 
+  79:Core/Src/test.c ****     HAL_Delay(10);
+ 294              		.loc 1 79 5
+ 295 019c 0A20     		movs	r0, #10
+ 296 019e FFF7FEFF 		bl	HAL_Delay
+  80:Core/Src/test.c **** 
+  81:Core/Src/test.c **** 
+  82:Core/Src/test.c ****     SSD1306_Clear ();
+ 297              		.loc 1 82 5
+ 298 01a2 FFF7FEFF 		bl	SSD1306_Clear
+  83:Core/Src/test.c **** 
+  84:Core/Src/test.c ****     x1    = SSD1306_WIDTH - 1;
+ 299              		.loc 1 84 11
+ 300 01a6 7F23     		movs	r3, #127
+ 301 01a8 3B73     		strb	r3, [r7, #12]
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 8
+
+
+  85:Core/Src/test.c ****     y1    = SSD1306_HEIGHT - 1;
+ 302              		.loc 1 85 11
+ 303 01aa 3F23     		movs	r3, #63
+ 304 01ac 7B73     		strb	r3, [r7, #13]
+  86:Core/Src/test.c ****     y2    = 0;
+ 305              		.loc 1 86 11
+ 306 01ae 0023     		movs	r3, #0
+ 307 01b0 BB73     		strb	r3, [r7, #14]
+  87:Core/Src/test.c ****     for (x2 = 0; x2 < SSD1306_WIDTH; x2 += 6)
+ 308              		.loc 1 87 13
+ 309 01b2 0023     		movs	r3, #0
+ 310 01b4 FB73     		strb	r3, [r7, #15]
+ 311              		.loc 1 87 5
+ 312 01b6 14E0     		b	.L14
+ 313              	.L15:
+  88:Core/Src/test.c ****     	{
+  89:Core/Src/test.c ****     		SSD1306_DrawLine(x1, y1, x2, y2, color);
+ 314              		.loc 1 89 7 discriminator 3
+ 315 01b8 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 316 01ba 98B2     		uxth	r0, r3
+ 317 01bc 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 318 01be 99B2     		uxth	r1, r3
+ 319 01c0 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 320 01c2 9AB2     		uxth	r2, r3
+ 321 01c4 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 322 01c6 9CB2     		uxth	r4, r3
+ 323 01c8 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 324 01ca 0093     		str	r3, [sp]
+ 325 01cc 2346     		mov	r3, r4
+ 326 01ce FFF7FEFF 		bl	SSD1306_DrawLine
+  90:Core/Src/test.c ****     		HAL_Delay(1);
+ 327              		.loc 1 90 7 discriminator 3
+ 328 01d2 0120     		movs	r0, #1
+ 329 01d4 FFF7FEFF 		bl	HAL_Delay
+  91:Core/Src/test.c ****     		SSD1306_UpdateScreen();
+ 330              		.loc 1 91 7 discriminator 3
+ 331 01d8 FFF7FEFF 		bl	SSD1306_UpdateScreen
+  87:Core/Src/test.c ****     	{
+ 332              		.loc 1 87 41 discriminator 3
+ 333 01dc FB7B     		ldrb	r3, [r7, #15]
+ 334 01de 0633     		adds	r3, r3, #6
+ 335 01e0 FB73     		strb	r3, [r7, #15]
+ 336              	.L14:
+  87:Core/Src/test.c ****     	{
+ 337              		.loc 1 87 21 discriminator 1
+ 338 01e2 97F90F30 		ldrsb	r3, [r7, #15]
+  87:Core/Src/test.c ****     	{
+ 339              		.loc 1 87 5 discriminator 1
+ 340 01e6 002B     		cmp	r3, #0
+ 341 01e8 E6DA     		bge	.L15
+  92:Core/Src/test.c ****     	}
+  93:Core/Src/test.c ****     x2    = 0;
+ 342              		.loc 1 93 11
+ 343 01ea 0023     		movs	r3, #0
+ 344 01ec FB73     		strb	r3, [r7, #15]
+  94:Core/Src/test.c ****     for (y2 = 0; y2 < SSD1306_HEIGHT; y2 += 6)
+ 345              		.loc 1 94 13
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 9
+
+
+ 346 01ee 0023     		movs	r3, #0
+ 347 01f0 BB73     		strb	r3, [r7, #14]
+ 348              		.loc 1 94 5
+ 349 01f2 14E0     		b	.L16
+ 350              	.L17:
+  95:Core/Src/test.c ****     	{
+  96:Core/Src/test.c ****     		SSD1306_DrawLine(x1, y1, x2, y2, color);
+ 351              		.loc 1 96 7 discriminator 3
+ 352 01f4 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 353 01f6 98B2     		uxth	r0, r3
+ 354 01f8 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 355 01fa 99B2     		uxth	r1, r3
+ 356 01fc FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 357 01fe 9AB2     		uxth	r2, r3
+ 358 0200 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 359 0202 9CB2     		uxth	r4, r3
+ 360 0204 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 361 0206 0093     		str	r3, [sp]
+ 362 0208 2346     		mov	r3, r4
+ 363 020a FFF7FEFF 		bl	SSD1306_DrawLine
+  97:Core/Src/test.c ****     		HAL_Delay(1);
+ 364              		.loc 1 97 7 discriminator 3
+ 365 020e 0120     		movs	r0, #1
+ 366 0210 FFF7FEFF 		bl	HAL_Delay
+  98:Core/Src/test.c ****     		SSD1306_UpdateScreen();
+ 367              		.loc 1 98 7 discriminator 3
+ 368 0214 FFF7FEFF 		bl	SSD1306_UpdateScreen
+  94:Core/Src/test.c ****     	{
+ 369              		.loc 1 94 42 discriminator 3
+ 370 0218 BB7B     		ldrb	r3, [r7, #14]
+ 371 021a 0633     		adds	r3, r3, #6
+ 372 021c BB73     		strb	r3, [r7, #14]
+ 373              	.L16:
+  94:Core/Src/test.c ****     	{
+ 374              		.loc 1 94 5 discriminator 1
+ 375 021e BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 376 0220 3F2B     		cmp	r3, #63
+ 377 0222 E7D9     		bls	.L17
+  99:Core/Src/test.c ****     	}
+ 100:Core/Src/test.c **** }
+ 378              		.loc 1 100 1
+ 379 0224 00BF     		nop
+ 380 0226 00BF     		nop
+ 381 0228 1437     		adds	r7, r7, #20
+ 382              	.LCFI3:
+ 383              		.cfi_def_cfa_offset 12
+ 384 022a BD46     		mov	sp, r7
+ 385              	.LCFI4:
+ 386              		.cfi_def_cfa_register 13
+ 387              		@ sp needed
+ 388 022c 90BD     		pop	{r4, r7, pc}
+ 389              		.cfi_endproc
+ 390              	.LFE65:
+ 392              		.section	.text.TestRectangles,"ax",%progbits
+ 393              		.align	1
+ 394              		.global	TestRectangles
+ 395              		.syntax unified
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 10
+
+
+ 396              		.thumb
+ 397              		.thumb_func
+ 398              		.fpu softvfp
+ 400              	TestRectangles:
+ 401              	.LFB66:
+ 101:Core/Src/test.c **** 
+ 102:Core/Src/test.c **** 
+ 103:Core/Src/test.c **** void TestRectangles (uint8_t color)
+ 104:Core/Src/test.c **** {
+ 402              		.loc 1 104 1
+ 403              		.cfi_startproc
+ 404              		@ args = 0, pretend = 0, frame = 16
+ 405              		@ frame_needed = 1, uses_anonymous_args = 0
+ 406 0000 90B5     		push	{r4, r7, lr}
+ 407              	.LCFI5:
+ 408              		.cfi_def_cfa_offset 12
+ 409              		.cfi_offset 4, -12
+ 410              		.cfi_offset 7, -8
+ 411              		.cfi_offset 14, -4
+ 412 0002 87B0     		sub	sp, sp, #28
+ 413              	.LCFI6:
+ 414              		.cfi_def_cfa_offset 40
+ 415 0004 02AF     		add	r7, sp, #8
+ 416              	.LCFI7:
+ 417              		.cfi_def_cfa 7, 32
+ 418 0006 0346     		mov	r3, r0
+ 419 0008 FB71     		strb	r3, [r7, #7]
+ 105:Core/Src/test.c ****     uint8_t n, i, i2;
+ 106:Core/Src/test.c **** 
+ 107:Core/Src/test.c ****     SSD1306_Clear ();
+ 420              		.loc 1 107 5
+ 421 000a FFF7FEFF 		bl	SSD1306_Clear
+ 108:Core/Src/test.c **** 
+ 109:Core/Src/test.c ****     n = min(SSD1306_WIDTH, SSD1306_HEIGHT);
+ 422              		.loc 1 109 7
+ 423 000e 4023     		movs	r3, #64
+ 424 0010 BB73     		strb	r3, [r7, #14]
+ 110:Core/Src/test.c **** 
+ 111:Core/Src/test.c ****     for (i = 2; i < n; i += 6)
+ 425              		.loc 1 111 12
+ 426 0012 0223     		movs	r3, #2
+ 427 0014 FB73     		strb	r3, [r7, #15]
+ 428              		.loc 1 111 5
+ 429 0016 1DE0     		b	.L19
+ 430              	.L20:
+ 112:Core/Src/test.c ****     {
+ 113:Core/Src/test.c ****         i2 = i / 2;
+ 431              		.loc 1 113 12 discriminator 3
+ 432 0018 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 433 001a 5B08     		lsrs	r3, r3, #1
+ 434 001c 7B73     		strb	r3, [r7, #13]
+ 114:Core/Src/test.c ****         SSD1306_DrawRectangle((SSD1306_WIDTH/2) - i2, (SSD1306_HEIGHT/2) - i2, i, i, color);
+ 435              		.loc 1 114 9 discriminator 3
+ 436 001e 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 437 0020 9BB2     		uxth	r3, r3
+ 438 0022 C3F14003 		rsb	r3, r3, #64
+ 439 0026 98B2     		uxth	r0, r3
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 11
+
+
+ 440 0028 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 441 002a 9BB2     		uxth	r3, r3
+ 442 002c C3F12003 		rsb	r3, r3, #32
+ 443 0030 99B2     		uxth	r1, r3
+ 444 0032 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 445 0034 9AB2     		uxth	r2, r3
+ 446 0036 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 447 0038 9CB2     		uxth	r4, r3
+ 448 003a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 449 003c 0093     		str	r3, [sp]
+ 450 003e 2346     		mov	r3, r4
+ 451 0040 FFF7FEFF 		bl	SSD1306_DrawRectangle
+ 115:Core/Src/test.c ****         SSD1306_UpdateScreen();
+ 452              		.loc 1 115 9 discriminator 3
+ 453 0044 FFF7FEFF 		bl	SSD1306_UpdateScreen
+ 116:Core/Src/test.c ****         HAL_Delay (10);
+ 454              		.loc 1 116 9 discriminator 3
+ 455 0048 0A20     		movs	r0, #10
+ 456 004a FFF7FEFF 		bl	HAL_Delay
+ 111:Core/Src/test.c ****     {
+ 457              		.loc 1 111 26 discriminator 3
+ 458 004e FB7B     		ldrb	r3, [r7, #15]
+ 459 0050 0633     		adds	r3, r3, #6
+ 460 0052 FB73     		strb	r3, [r7, #15]
+ 461              	.L19:
+ 111:Core/Src/test.c ****     {
+ 462              		.loc 1 111 5 discriminator 1
+ 463 0054 FA7B     		ldrb	r2, [r7, #15]	@ zero_extendqisi2
+ 464 0056 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 465 0058 9A42     		cmp	r2, r3
+ 466 005a DDD3     		bcc	.L20
+ 117:Core/Src/test.c ****     }
+ 118:Core/Src/test.c **** }
+ 467              		.loc 1 118 1
+ 468 005c 00BF     		nop
+ 469 005e 00BF     		nop
+ 470 0060 1437     		adds	r7, r7, #20
+ 471              	.LCFI8:
+ 472              		.cfi_def_cfa_offset 12
+ 473 0062 BD46     		mov	sp, r7
+ 474              	.LCFI9:
+ 475              		.cfi_def_cfa_register 13
+ 476              		@ sp needed
+ 477 0064 90BD     		pop	{r4, r7, pc}
+ 478              		.cfi_endproc
+ 479              	.LFE66:
+ 481              		.section	.text.TestFilledRectangles,"ax",%progbits
+ 482              		.align	1
+ 483              		.global	TestFilledRectangles
+ 484              		.syntax unified
+ 485              		.thumb
+ 486              		.thumb_func
+ 487              		.fpu softvfp
+ 489              	TestFilledRectangles:
+ 490              	.LFB67:
+ 119:Core/Src/test.c **** 
+ 120:Core/Src/test.c **** void TestFilledRectangles (uint8_t color)
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 12
+
+
+ 121:Core/Src/test.c **** {
+ 491              		.loc 1 121 1
+ 492              		.cfi_startproc
+ 493              		@ args = 0, pretend = 0, frame = 16
+ 494              		@ frame_needed = 1, uses_anonymous_args = 0
+ 495 0000 90B5     		push	{r4, r7, lr}
+ 496              	.LCFI10:
+ 497              		.cfi_def_cfa_offset 12
+ 498              		.cfi_offset 4, -12
+ 499              		.cfi_offset 7, -8
+ 500              		.cfi_offset 14, -4
+ 501 0002 87B0     		sub	sp, sp, #28
+ 502              	.LCFI11:
+ 503              		.cfi_def_cfa_offset 40
+ 504 0004 02AF     		add	r7, sp, #8
+ 505              	.LCFI12:
+ 506              		.cfi_def_cfa 7, 32
+ 507 0006 0346     		mov	r3, r0
+ 508 0008 FB71     		strb	r3, [r7, #7]
+ 122:Core/Src/test.c ****     uint8_t n, i, i2,
+ 123:Core/Src/test.c ****             cx = SSD1306_WIDTH / 2 - 1,
+ 509              		.loc 1 123 13
+ 510 000a 3F23     		movs	r3, #63
+ 511 000c BB73     		strb	r3, [r7, #14]
+ 124:Core/Src/test.c ****             cy = SSD1306_HEIGHT / 2 - 1;
+ 512              		.loc 1 124 13
+ 513 000e 1F23     		movs	r3, #31
+ 514 0010 7B73     		strb	r3, [r7, #13]
+ 125:Core/Src/test.c **** 
+ 126:Core/Src/test.c ****     SSD1306_Clear ();
+ 515              		.loc 1 126 5
+ 516 0012 FFF7FEFF 		bl	SSD1306_Clear
+ 127:Core/Src/test.c **** 
+ 128:Core/Src/test.c ****     n = min(SSD1306_WIDTH, SSD1306_HEIGHT);
+ 517              		.loc 1 128 7
+ 518 0016 4023     		movs	r3, #64
+ 519 0018 3B73     		strb	r3, [r7, #12]
+ 129:Core/Src/test.c ****     for (i = n; i > 0; i -= 6)
+ 520              		.loc 1 129 12
+ 521 001a 3B7B     		ldrb	r3, [r7, #12]
+ 522 001c FB73     		strb	r3, [r7, #15]
+ 523              		.loc 1 129 5
+ 524 001e 1FE0     		b	.L22
+ 525              	.L23:
+ 130:Core/Src/test.c ****     {
+ 131:Core/Src/test.c ****         i2    = i / 2;
+ 526              		.loc 1 131 15 discriminator 3
+ 527 0020 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 528 0022 5B08     		lsrs	r3, r3, #1
+ 529 0024 FB72     		strb	r3, [r7, #11]
+ 132:Core/Src/test.c ****         SSD1306_DrawFilledRectangle(cx - i2, cy - i2, i, i, color);
+ 530              		.loc 1 132 9 discriminator 3
+ 531 0026 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 532 0028 9AB2     		uxth	r2, r3
+ 533 002a FB7A     		ldrb	r3, [r7, #11]	@ zero_extendqisi2
+ 534 002c 9BB2     		uxth	r3, r3
+ 535 002e D31A     		subs	r3, r2, r3
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 13
+
+
+ 536 0030 98B2     		uxth	r0, r3
+ 537 0032 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 538 0034 9AB2     		uxth	r2, r3
+ 539 0036 FB7A     		ldrb	r3, [r7, #11]	@ zero_extendqisi2
+ 540 0038 9BB2     		uxth	r3, r3
+ 541 003a D31A     		subs	r3, r2, r3
+ 542 003c 99B2     		uxth	r1, r3
+ 543 003e FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 544 0040 9AB2     		uxth	r2, r3
+ 545 0042 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 546 0044 9CB2     		uxth	r4, r3
+ 547 0046 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 548 0048 0093     		str	r3, [sp]
+ 549 004a 2346     		mov	r3, r4
+ 550 004c FFF7FEFF 		bl	SSD1306_DrawFilledRectangle
+ 133:Core/Src/test.c ****         SSD1306_UpdateScreen();
+ 551              		.loc 1 133 9 discriminator 3
+ 552 0050 FFF7FEFF 		bl	SSD1306_UpdateScreen
+ 134:Core/Src/test.c ****         HAL_Delay (10);
+ 553              		.loc 1 134 9 discriminator 3
+ 554 0054 0A20     		movs	r0, #10
+ 555 0056 FFF7FEFF 		bl	HAL_Delay
+ 129:Core/Src/test.c ****     {
+ 556              		.loc 1 129 26 discriminator 3
+ 557 005a FB7B     		ldrb	r3, [r7, #15]
+ 558 005c 063B     		subs	r3, r3, #6
+ 559 005e FB73     		strb	r3, [r7, #15]
+ 560              	.L22:
+ 129:Core/Src/test.c ****     {
+ 561              		.loc 1 129 5 discriminator 1
+ 562 0060 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 563 0062 002B     		cmp	r3, #0
+ 564 0064 DCD1     		bne	.L23
+ 135:Core/Src/test.c ****     }
+ 136:Core/Src/test.c **** }
+ 565              		.loc 1 136 1
+ 566 0066 00BF     		nop
+ 567 0068 00BF     		nop
+ 568 006a 1437     		adds	r7, r7, #20
+ 569              	.LCFI13:
+ 570              		.cfi_def_cfa_offset 12
+ 571 006c BD46     		mov	sp, r7
+ 572              	.LCFI14:
+ 573              		.cfi_def_cfa_register 13
+ 574              		@ sp needed
+ 575 006e 90BD     		pop	{r4, r7, pc}
+ 576              		.cfi_endproc
+ 577              	.LFE67:
+ 579              		.section	.text.TestFilledCircles,"ax",%progbits
+ 580              		.align	1
+ 581              		.global	TestFilledCircles
+ 582              		.syntax unified
+ 583              		.thumb
+ 584              		.thumb_func
+ 585              		.fpu softvfp
+ 587              	TestFilledCircles:
+ 588              	.LFB68:
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 14
+
+
+ 137:Core/Src/test.c **** 
+ 138:Core/Src/test.c **** void TestFilledCircles(uint8_t radius, uint16_t color)
+ 139:Core/Src/test.c **** {
+ 589              		.loc 1 139 1
+ 590              		.cfi_startproc
+ 591              		@ args = 0, pretend = 0, frame = 16
+ 592              		@ frame_needed = 1, uses_anonymous_args = 0
+ 593 0000 80B5     		push	{r7, lr}
+ 594              	.LCFI15:
+ 595              		.cfi_def_cfa_offset 8
+ 596              		.cfi_offset 7, -8
+ 597              		.cfi_offset 14, -4
+ 598 0002 84B0     		sub	sp, sp, #16
+ 599              	.LCFI16:
+ 600              		.cfi_def_cfa_offset 24
+ 601 0004 00AF     		add	r7, sp, #0
+ 602              	.LCFI17:
+ 603              		.cfi_def_cfa_register 7
+ 604 0006 0346     		mov	r3, r0
+ 605 0008 0A46     		mov	r2, r1
+ 606 000a FB71     		strb	r3, [r7, #7]
+ 607 000c 1346     		mov	r3, r2	@ movhi
+ 608 000e BB80     		strh	r3, [r7, #4]	@ movhi
+ 140:Core/Src/test.c ****     uint8_t x, y, w = SSD1306_WIDTH, h = SSD1306_HEIGHT, r2 = radius * 2;
+ 609              		.loc 1 140 19
+ 610 0010 8023     		movs	r3, #128
+ 611 0012 7B73     		strb	r3, [r7, #13]
+ 612              		.loc 1 140 38
+ 613 0014 4023     		movs	r3, #64
+ 614 0016 3B73     		strb	r3, [r7, #12]
+ 615              		.loc 1 140 58
+ 616 0018 FB79     		ldrb	r3, [r7, #7]
+ 617 001a 5B00     		lsls	r3, r3, #1
+ 618 001c FB72     		strb	r3, [r7, #11]
+ 141:Core/Src/test.c **** 
+ 142:Core/Src/test.c ****     SSD1306_Clear ();
+ 619              		.loc 1 142 5
+ 620 001e FFF7FEFF 		bl	SSD1306_Clear
+ 143:Core/Src/test.c **** 
+ 144:Core/Src/test.c ****     for (x = radius; x < w; x += r2)
+ 621              		.loc 1 144 12
+ 622 0022 FB79     		ldrb	r3, [r7, #7]
+ 623 0024 FB73     		strb	r3, [r7, #15]
+ 624              		.loc 1 144 5
+ 625 0026 1DE0     		b	.L25
+ 626              	.L28:
+ 145:Core/Src/test.c ****     {
+ 146:Core/Src/test.c ****         for (y = radius; y < h; y += r2)
+ 627              		.loc 1 146 16
+ 628 0028 FB79     		ldrb	r3, [r7, #7]
+ 629 002a BB73     		strb	r3, [r7, #14]
+ 630              		.loc 1 146 9
+ 631 002c 12E0     		b	.L26
+ 632              	.L27:
+ 147:Core/Src/test.c ****         {
+ 148:Core/Src/test.c ****             SSD1306_DrawFilledCircle(x, y, radius, color);
+ 633              		.loc 1 148 13 discriminator 3
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 15
+
+
+ 634 002e FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 635 0030 18B2     		sxth	r0, r3
+ 636 0032 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 637 0034 19B2     		sxth	r1, r3
+ 638 0036 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 639 0038 1AB2     		sxth	r2, r3
+ 640 003a BB88     		ldrh	r3, [r7, #4]	@ movhi
+ 641 003c DBB2     		uxtb	r3, r3
+ 642 003e FFF7FEFF 		bl	SSD1306_DrawFilledCircle
+ 149:Core/Src/test.c ****             SSD1306_UpdateScreen();
+ 643              		.loc 1 149 13 discriminator 3
+ 644 0042 FFF7FEFF 		bl	SSD1306_UpdateScreen
+ 150:Core/Src/test.c ****             HAL_Delay (10);
+ 645              		.loc 1 150 13 discriminator 3
+ 646 0046 0A20     		movs	r0, #10
+ 647 0048 FFF7FEFF 		bl	HAL_Delay
+ 146:Core/Src/test.c ****         {
+ 648              		.loc 1 146 35 discriminator 3
+ 649 004c BA7B     		ldrb	r2, [r7, #14]
+ 650 004e FB7A     		ldrb	r3, [r7, #11]
+ 651 0050 1344     		add	r3, r3, r2
+ 652 0052 BB73     		strb	r3, [r7, #14]
+ 653              	.L26:
+ 146:Core/Src/test.c ****         {
+ 654              		.loc 1 146 9 discriminator 1
+ 655 0054 BA7B     		ldrb	r2, [r7, #14]	@ zero_extendqisi2
+ 656 0056 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 657 0058 9A42     		cmp	r2, r3
+ 658 005a E8D3     		bcc	.L27
+ 144:Core/Src/test.c ****     {
+ 659              		.loc 1 144 31 discriminator 2
+ 660 005c FA7B     		ldrb	r2, [r7, #15]
+ 661 005e FB7A     		ldrb	r3, [r7, #11]
+ 662 0060 1344     		add	r3, r3, r2
+ 663 0062 FB73     		strb	r3, [r7, #15]
+ 664              	.L25:
+ 144:Core/Src/test.c ****     {
+ 665              		.loc 1 144 5 discriminator 1
+ 666 0064 FA7B     		ldrb	r2, [r7, #15]	@ zero_extendqisi2
+ 667 0066 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 668 0068 9A42     		cmp	r2, r3
+ 669 006a DDD3     		bcc	.L28
+ 151:Core/Src/test.c ****         }
+ 152:Core/Src/test.c ****     }
+ 153:Core/Src/test.c **** }
+ 670              		.loc 1 153 1
+ 671 006c 00BF     		nop
+ 672 006e 00BF     		nop
+ 673 0070 1037     		adds	r7, r7, #16
+ 674              	.LCFI18:
+ 675              		.cfi_def_cfa_offset 8
+ 676 0072 BD46     		mov	sp, r7
+ 677              	.LCFI19:
+ 678              		.cfi_def_cfa_register 13
+ 679              		@ sp needed
+ 680 0074 80BD     		pop	{r7, pc}
+ 681              		.cfi_endproc
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 16
+
+
+ 682              	.LFE68:
+ 684              		.section	.text.TestCircles,"ax",%progbits
+ 685              		.align	1
+ 686              		.global	TestCircles
+ 687              		.syntax unified
+ 688              		.thumb
+ 689              		.thumb_func
+ 690              		.fpu softvfp
+ 692              	TestCircles:
+ 693              	.LFB69:
+ 154:Core/Src/test.c **** 
+ 155:Core/Src/test.c **** void TestCircles(uint8_t radius, uint16_t color)
+ 156:Core/Src/test.c **** {
+ 694              		.loc 1 156 1
+ 695              		.cfi_startproc
+ 696              		@ args = 0, pretend = 0, frame = 16
+ 697              		@ frame_needed = 1, uses_anonymous_args = 0
+ 698 0000 80B5     		push	{r7, lr}
+ 699              	.LCFI20:
+ 700              		.cfi_def_cfa_offset 8
+ 701              		.cfi_offset 7, -8
+ 702              		.cfi_offset 14, -4
+ 703 0002 84B0     		sub	sp, sp, #16
+ 704              	.LCFI21:
+ 705              		.cfi_def_cfa_offset 24
+ 706 0004 00AF     		add	r7, sp, #0
+ 707              	.LCFI22:
+ 708              		.cfi_def_cfa_register 7
+ 709 0006 0346     		mov	r3, r0
+ 710 0008 0A46     		mov	r2, r1
+ 711 000a FB71     		strb	r3, [r7, #7]
+ 712 000c 1346     		mov	r3, r2	@ movhi
+ 713 000e BB80     		strh	r3, [r7, #4]	@ movhi
+ 157:Core/Src/test.c **** 	SSD1306_Clear ();
+ 714              		.loc 1 157 2
+ 715 0010 FFF7FEFF 		bl	SSD1306_Clear
+ 158:Core/Src/test.c **** 
+ 159:Core/Src/test.c **** 	uint8_t x, y, r2 = radius * 2,
+ 716              		.loc 1 159 16
+ 717 0014 FB79     		ldrb	r3, [r7, #7]
+ 718 0016 5B00     		lsls	r3, r3, #1
+ 719 0018 7B73     		strb	r3, [r7, #13]
+ 160:Core/Src/test.c ****             w = SSD1306_WIDTH + radius,
+ 720              		.loc 1 160 13
+ 721 001a FB79     		ldrb	r3, [r7, #7]
+ 722 001c 803B     		subs	r3, r3, #128
+ 723 001e 3B73     		strb	r3, [r7, #12]
+ 161:Core/Src/test.c ****             h = SSD1306_HEIGHT + radius;
+ 724              		.loc 1 161 13
+ 725 0020 FB79     		ldrb	r3, [r7, #7]
+ 726 0022 4033     		adds	r3, r3, #64
+ 727 0024 FB72     		strb	r3, [r7, #11]
+ 162:Core/Src/test.c **** 
+ 163:Core/Src/test.c ****     for (x = 0; x < w; x += r2)
+ 728              		.loc 1 163 12
+ 729 0026 0023     		movs	r3, #0
+ 730 0028 FB73     		strb	r3, [r7, #15]
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 17
+
+
+ 731              		.loc 1 163 5
+ 732 002a 1DE0     		b	.L30
+ 733              	.L33:
+ 164:Core/Src/test.c ****     {
+ 165:Core/Src/test.c ****         for (y = 0; y < h; y += r2)
+ 734              		.loc 1 165 16
+ 735 002c 0023     		movs	r3, #0
+ 736 002e BB73     		strb	r3, [r7, #14]
+ 737              		.loc 1 165 9
+ 738 0030 12E0     		b	.L31
+ 739              	.L32:
+ 166:Core/Src/test.c ****         {
+ 167:Core/Src/test.c ****             SSD1306_DrawCircle(x, y, radius, color);
+ 740              		.loc 1 167 13 discriminator 3
+ 741 0032 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 742 0034 18B2     		sxth	r0, r3
+ 743 0036 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 744 0038 19B2     		sxth	r1, r3
+ 745 003a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 746 003c 1AB2     		sxth	r2, r3
+ 747 003e BB88     		ldrh	r3, [r7, #4]	@ movhi
+ 748 0040 DBB2     		uxtb	r3, r3
+ 749 0042 FFF7FEFF 		bl	SSD1306_DrawCircle
+ 168:Core/Src/test.c ****             SSD1306_UpdateScreen();
+ 750              		.loc 1 168 13 discriminator 3
+ 751 0046 FFF7FEFF 		bl	SSD1306_UpdateScreen
+ 169:Core/Src/test.c ****             HAL_Delay (10);
+ 752              		.loc 1 169 13 discriminator 3
+ 753 004a 0A20     		movs	r0, #10
+ 754 004c FFF7FEFF 		bl	HAL_Delay
+ 165:Core/Src/test.c ****         {
+ 755              		.loc 1 165 30 discriminator 3
+ 756 0050 BA7B     		ldrb	r2, [r7, #14]
+ 757 0052 7B7B     		ldrb	r3, [r7, #13]
+ 758 0054 1344     		add	r3, r3, r2
+ 759 0056 BB73     		strb	r3, [r7, #14]
+ 760              	.L31:
+ 165:Core/Src/test.c ****         {
+ 761              		.loc 1 165 9 discriminator 1
+ 762 0058 BA7B     		ldrb	r2, [r7, #14]	@ zero_extendqisi2
+ 763 005a FB7A     		ldrb	r3, [r7, #11]	@ zero_extendqisi2
+ 764 005c 9A42     		cmp	r2, r3
+ 765 005e E8D3     		bcc	.L32
+ 163:Core/Src/test.c ****     {
+ 766              		.loc 1 163 26 discriminator 2
+ 767 0060 FA7B     		ldrb	r2, [r7, #15]
+ 768 0062 7B7B     		ldrb	r3, [r7, #13]
+ 769 0064 1344     		add	r3, r3, r2
+ 770 0066 FB73     		strb	r3, [r7, #15]
+ 771              	.L30:
+ 163:Core/Src/test.c ****     {
+ 772              		.loc 1 163 5 discriminator 1
+ 773 0068 FA7B     		ldrb	r2, [r7, #15]	@ zero_extendqisi2
+ 774 006a 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 775 006c 9A42     		cmp	r2, r3
+ 776 006e DDD3     		bcc	.L33
+ 170:Core/Src/test.c ****         }
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 18
+
+
+ 171:Core/Src/test.c ****     }
+ 172:Core/Src/test.c **** }
+ 777              		.loc 1 172 1
+ 778 0070 00BF     		nop
+ 779 0072 00BF     		nop
+ 780 0074 1037     		adds	r7, r7, #16
+ 781              	.LCFI23:
+ 782              		.cfi_def_cfa_offset 8
+ 783 0076 BD46     		mov	sp, r7
+ 784              	.LCFI24:
+ 785              		.cfi_def_cfa_register 13
+ 786              		@ sp needed
+ 787 0078 80BD     		pop	{r7, pc}
+ 788              		.cfi_endproc
+ 789              	.LFE69:
+ 791              		.section	.text.TestTriangles,"ax",%progbits
+ 792              		.align	1
+ 793              		.global	TestTriangles
+ 794              		.syntax unified
+ 795              		.thumb
+ 796              		.thumb_func
+ 797              		.fpu softvfp
+ 799              	TestTriangles:
+ 800              	.LFB70:
+ 173:Core/Src/test.c **** 
+ 174:Core/Src/test.c **** void TestTriangles(uint8_t color)
+ 175:Core/Src/test.c **** {
+ 801              		.loc 1 175 1
+ 802              		.cfi_startproc
+ 803              		@ args = 0, pretend = 0, frame = 16
+ 804              		@ frame_needed = 1, uses_anonymous_args = 0
+ 805 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 806              	.LCFI25:
+ 807              		.cfi_def_cfa_offset 20
+ 808              		.cfi_offset 4, -20
+ 809              		.cfi_offset 5, -16
+ 810              		.cfi_offset 6, -12
+ 811              		.cfi_offset 7, -8
+ 812              		.cfi_offset 14, -4
+ 813 0002 89B0     		sub	sp, sp, #36
+ 814              	.LCFI26:
+ 815              		.cfi_def_cfa_offset 56
+ 816 0004 04AF     		add	r7, sp, #16
+ 817              	.LCFI27:
+ 818              		.cfi_def_cfa 7, 40
+ 819 0006 0346     		mov	r3, r0
+ 820 0008 FB71     		strb	r3, [r7, #7]
+ 176:Core/Src/test.c ****     uint8_t n, i, cx = SSD1306_WIDTH  / 2 - 1,
+ 821              		.loc 1 176 19
+ 822 000a 3F23     		movs	r3, #63
+ 823 000c BB73     		strb	r3, [r7, #14]
+ 177:Core/Src/test.c ****             cy = SSD1306_HEIGHT / 2 - 1;
+ 824              		.loc 1 177 13
+ 825 000e 1F23     		movs	r3, #31
+ 826 0010 7B73     		strb	r3, [r7, #13]
+ 178:Core/Src/test.c **** 
+ 179:Core/Src/test.c ****     SSD1306_Clear ();
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 19
+
+
+ 827              		.loc 1 179 5
+ 828 0012 FFF7FEFF 		bl	SSD1306_Clear
+ 180:Core/Src/test.c **** 
+ 181:Core/Src/test.c ****     n = min(cx, cy);
+ 829              		.loc 1 181 7
+ 830 0016 7A7B     		ldrb	r2, [r7, #13]	@ zero_extendqisi2
+ 831 0018 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 832 001a 9342     		cmp	r3, r2
+ 833 001c 28BF     		it	cs
+ 834 001e 1346     		movcs	r3, r2
+ 835 0020 3B73     		strb	r3, [r7, #12]
+ 182:Core/Src/test.c ****     for (i = 0; i < n; i += 5)
+ 836              		.loc 1 182 12
+ 837 0022 0023     		movs	r3, #0
+ 838 0024 FB73     		strb	r3, [r7, #15]
+ 839              		.loc 1 182 5
+ 840 0026 30E0     		b	.L35
+ 841              	.L36:
+ 183:Core/Src/test.c ****     {
+ 184:Core/Src/test.c ****         SSD1306_DrawTriangle(cx , cy - i, cx - i, cy + i, cx + i, cy + i, color);
+ 842              		.loc 1 184 9 discriminator 3
+ 843 0028 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 844 002a 98B2     		uxth	r0, r3
+ 845 002c 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 846 002e 9AB2     		uxth	r2, r3
+ 847 0030 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 848 0032 9BB2     		uxth	r3, r3
+ 849 0034 D31A     		subs	r3, r2, r3
+ 850 0036 9CB2     		uxth	r4, r3
+ 851 0038 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 852 003a 9AB2     		uxth	r2, r3
+ 853 003c FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 854 003e 9BB2     		uxth	r3, r3
+ 855 0040 D31A     		subs	r3, r2, r3
+ 856 0042 9DB2     		uxth	r5, r3
+ 857 0044 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 858 0046 9AB2     		uxth	r2, r3
+ 859 0048 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 860 004a 9BB2     		uxth	r3, r3
+ 861 004c 1344     		add	r3, r3, r2
+ 862 004e 9EB2     		uxth	r6, r3
+ 863 0050 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 864 0052 9AB2     		uxth	r2, r3
+ 865 0054 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 866 0056 9BB2     		uxth	r3, r3
+ 867 0058 1344     		add	r3, r3, r2
+ 868 005a 9BB2     		uxth	r3, r3
+ 869 005c 7A7B     		ldrb	r2, [r7, #13]	@ zero_extendqisi2
+ 870 005e 91B2     		uxth	r1, r2
+ 871 0060 FA7B     		ldrb	r2, [r7, #15]	@ zero_extendqisi2
+ 872 0062 92B2     		uxth	r2, r2
+ 873 0064 0A44     		add	r2, r2, r1
+ 874 0066 92B2     		uxth	r2, r2
+ 875 0068 F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 876 006a 0291     		str	r1, [sp, #8]
+ 877 006c 0192     		str	r2, [sp, #4]
+ 878 006e 0093     		str	r3, [sp]
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 20
+
+
+ 879 0070 3346     		mov	r3, r6
+ 880 0072 2A46     		mov	r2, r5
+ 881 0074 2146     		mov	r1, r4
+ 882 0076 FFF7FEFF 		bl	SSD1306_DrawTriangle
+ 185:Core/Src/test.c ****         SSD1306_UpdateScreen();
+ 883              		.loc 1 185 9 discriminator 3
+ 884 007a FFF7FEFF 		bl	SSD1306_UpdateScreen
+ 186:Core/Src/test.c ****         HAL_Delay (10);
+ 885              		.loc 1 186 9 discriminator 3
+ 886 007e 0A20     		movs	r0, #10
+ 887 0080 FFF7FEFF 		bl	HAL_Delay
+ 182:Core/Src/test.c ****     {
+ 888              		.loc 1 182 26 discriminator 3
+ 889 0084 FB7B     		ldrb	r3, [r7, #15]
+ 890 0086 0533     		adds	r3, r3, #5
+ 891 0088 FB73     		strb	r3, [r7, #15]
+ 892              	.L35:
+ 182:Core/Src/test.c ****     {
+ 893              		.loc 1 182 5 discriminator 1
+ 894 008a FA7B     		ldrb	r2, [r7, #15]	@ zero_extendqisi2
+ 895 008c 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 896 008e 9A42     		cmp	r2, r3
+ 897 0090 CAD3     		bcc	.L36
+ 187:Core/Src/test.c ****     }
+ 188:Core/Src/test.c **** 
+ 189:Core/Src/test.c **** }
+ 898              		.loc 1 189 1
+ 899 0092 00BF     		nop
+ 900 0094 00BF     		nop
+ 901 0096 1437     		adds	r7, r7, #20
+ 902              	.LCFI28:
+ 903              		.cfi_def_cfa_offset 20
+ 904 0098 BD46     		mov	sp, r7
+ 905              	.LCFI29:
+ 906              		.cfi_def_cfa_register 13
+ 907              		@ sp needed
+ 908 009a F0BD     		pop	{r4, r5, r6, r7, pc}
+ 909              		.cfi_endproc
+ 910              	.LFE70:
+ 912              		.text
+ 913              	.Letext0:
+ 914              		.file 2 "c:\\arm-gcc\\tools\\gcc-arm-none-eabi-10-2020-q4-major\\arm-none-eabi\\include\\machine\\
+ 915              		.file 3 "c:\\arm-gcc\\tools\\gcc-arm-none-eabi-10-2020-q4-major\\arm-none-eabi\\include\\sys\\_std
+ARM GAS  C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s 			page 21
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 test.c
+C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s:16     .text.TestLines:00000000 $t
+C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s:24     .text.TestLines:00000000 TestLines
+C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s:393    .text.TestRectangles:00000000 $t
+C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s:400    .text.TestRectangles:00000000 TestRectangles
+C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s:482    .text.TestFilledRectangles:00000000 $t
+C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s:489    .text.TestFilledRectangles:00000000 TestFilledRectangles
+C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s:580    .text.TestFilledCircles:00000000 $t
+C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s:587    .text.TestFilledCircles:00000000 TestFilledCircles
+C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s:685    .text.TestCircles:00000000 $t
+C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s:692    .text.TestCircles:00000000 TestCircles
+C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s:792    .text.TestTriangles:00000000 $t
+C:\Users\brunodc\AppData\Local\Temp\ccA6YYQu.s:799    .text.TestTriangles:00000000 TestTriangles
+
+UNDEFINED SYMBOLS
+SSD1306_Clear
+SSD1306_DrawLine
+HAL_Delay
+SSD1306_UpdateScreen
+SSD1306_DrawRectangle
+SSD1306_DrawFilledRectangle
+SSD1306_DrawFilledCircle
+SSD1306_DrawCircle
+SSD1306_DrawTriangle
