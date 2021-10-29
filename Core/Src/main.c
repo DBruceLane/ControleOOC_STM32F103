@@ -43,6 +43,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
 I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim4;
@@ -54,6 +56,10 @@ uint32_t counterPrev = 0;
 char txtCounter[10];
 _Bool ligarMotor = false;
 _Bool StepAlta = true;
+
+// LM35
+uint32_t TempVolts;
+float TempCelsius;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -61,6 +67,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM4_Init(void);
+static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
 void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim) // Interrupt do passo do motor
 {
@@ -74,7 +81,7 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim) // Interrupt do pa
   {
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0); // Pino Step
     StepAlta = true;
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
+    //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
   }
 
 /*
@@ -93,17 +100,25 @@ void MenuHandler(void)
     {
       
       itoa(counterOpcao, txtCounter, 10); // Coloca valor do counter na txtCounter
-      if (counterPrev != counterOpcao) // Atualiza tela so se mudar contador
-      {
-        SSD1306_Clear();
+      //if (counterPrev != counterOpcao) // Atualiza tela so se mudar contador
+      //{
+        //SSD1306_Clear();
         counterPrev = counterOpcao;
         SSD1306_GotoXY(2, 2);
         SSD1306_Puts(txtCounter, &Font_7x10, 1);
         SSD1306_GotoXY(2, 12);
         SSD1306_Puts("1 Outro Menu", &Font_7x10, 1);
+        SSD1306_GotoXY(2, 22);
+        itoa(TempCelsius, txtCounter, 10);
+        SSD1306_Puts(txtCounter, &Font_7x10, 1);
+        SSD1306_GotoXY(16, 22);
+        SSD1306_Puts(",", &Font_7x10, 1);
+        SSD1306_GotoXY(23, 22);
+        itoa(100*(TempCelsius-(int)TempCelsius), txtCounter, 10);  
+        SSD1306_Puts(txtCounter, &Font_7x10, 1);
         
         SSD1306_UpdateScreen();
-      }
+      //}
     }
     else if (MenuAtual==1)
     {
@@ -205,20 +220,17 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_TIM4_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  /*SSD1306_Init(); // initialize the display
-
-    SSD1306_GotoXY(10, 10);                // goto 10, 10
-    SSD1306_Puts("HELLO", &Font_11x18, 1); // print Hello
-    SSD1306_GotoXY(10, 30);
-    SSD1306_Puts("WORLD !!", &Font_11x18, 1);
-    SSD1306_UpdateScreen();*/
   SSD1306_Init();
+  
+  
 
   while (1)
   {
@@ -265,6 +277,10 @@ int main(void)
       ClickHandler();
     }
     */
+    HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1,100);
+    TempVolts = HAL_ADC_GetValue(&hadc1);
+    TempCelsius = ((TempVolts * 1.1 / (4095)) / 0.01);
     MenuHandler();
     
   
@@ -344,6 +360,7 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -372,6 +389,57 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+  /** Common config
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_3;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
 }
 
 /**
@@ -481,10 +549,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PA1 PA8 PA10 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_8|GPIO_PIN_10;
+  /*Configure GPIO pin : PA1 */
+  GPIO_InitStruct.Pin = GPIO_PIN_1;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
@@ -499,6 +567,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PA8 PA10 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 }
 
