@@ -229,6 +229,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   SSD1306_Init();
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, 1);
   
   
 
@@ -282,6 +283,17 @@ int main(void)
     TempVolts = HAL_ADC_GetValue(&hadc1);
     TempCelsius = ((TempVolts * 1.1 / (4095)) / 0.01);
     MenuHandler();
+
+    if(TempCelsius<20.0)
+    {
+      //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 1);
+    }
+    else
+    {
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 0);
+    }
     
   
     if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10))
@@ -293,7 +305,11 @@ int main(void)
     {
       //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
     }
-    
+
+    //HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 1);
+    //HAL_Delay(1);
+    //HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
+    //HAL_Delay(1);
     
     
     // update screen
@@ -542,6 +558,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_8|GPIO_PIN_10, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3|GPIO_PIN_4, GPIO_PIN_RESET);
+
   /*Configure GPIO pin : PC13 */
   GPIO_InitStruct.Pin = GPIO_PIN_13;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -574,6 +593,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB3 PB4 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 
