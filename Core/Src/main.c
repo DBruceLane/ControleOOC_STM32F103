@@ -47,19 +47,26 @@ ADC_HandleTypeDef hadc1;
 
 I2C_HandleTypeDef hi2c1;
 
+TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim4;
 
 /* USER CODE BEGIN PV */
+// Display OLED
 uint32_t MenuAtual = 0;
 uint32_t counterOpcao = 0;
 uint32_t counterPrev = 0;
 char txtCounter[10];
+
+// Motor
 _Bool ligarMotor = false;
 _Bool StepAlta = true;
 
 // LM35
 uint32_t TempVolts;
 float TempCelsius;
+
+//PID
+float setpoint, kp, ki, kd, y, erroInt, erroAnt, Ts, yiAnt, ydAnt, Nd, yPWM,tim4ms;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -68,7 +75,42 @@ static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
+void calcPid(void){
+    Ts = tim4ms;
+    float erroAtual, yp, yi, yd;
+    erroAtual = setpoint - TempCelsius;
+    yp = kp*erroAtual;
+    yi = ki*Ts*(erroAtual+erroAnt)/2.0 + yiAnt;
+    yd = kd*Nd*(erroAtual-erroAnt) + (1+Nd*Ts)*ydAnt;
+    y = yp+yi+yd;
+
+    yiAnt = yi;
+    ydAnt = yd;
+    erroAnt = erroAtual;
+
+    if (y>100)
+    {
+      y = 100;
+    }
+    else if (y<0)
+    {
+      y = 0;
+    }
+
+    if (y==0)
+    {
+      HAL_TIM_PWM_Stop_IT(&htim2, TIM_CHANNEL_2);
+    }
+    else
+    {
+      HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+      yPWM = htim2.Instance->ARR*(100-y)/100;
+      htim2.Instance->CCR1 = yPWM;
+    }
+}
+
 void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim) // Interrupt do passo do motor
 {
   if(StepAlta)
@@ -81,48 +123,41 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim) // Interrupt do pa
   {
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0); // Pino Step
     StepAlta = true;
-    //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
   }
-
-/*
-  static uint32_t millis = 0;
-  millis++;
-  if (millis % 1000 == 0) {
-    HAL_GPIO_WritePin(GPIOB, MotorSTEP_Pin, 0);
-  }
-  */
-  
+  //calcPid(); 
 }
+
 
 void MenuHandler(void)
 {
   if(MenuAtual==0)
-    {
+    {     
+      itoa(counterOpcao, txtCounter, 10); // Coloca valor do counter na txtCounter     
+      //SSD1306_Clear();
+      counterPrev = counterOpcao;
+      SSD1306_GotoXY(2, 2);
+      SSD1306_Puts(txtCounter, &Font_7x10, 1);
+      SSD1306_GotoXY(2, 12);
+      SSD1306_Puts("1 Outro Menu", &Font_7x10, 1);
+      SSD1306_GotoXY(2, 22);
+      itoa(TempCelsius, txtCounter, 10);
+      SSD1306_Puts(txtCounter, &Font_7x10, 1);
+      SSD1306_GotoXY(16, 22);
+      SSD1306_Puts(",", &Font_7x10, 1);
+      SSD1306_GotoXY(23, 22);
+      itoa(100*(TempCelsius-(int)TempCelsius), txtCounter, 10);  
+      SSD1306_Puts(txtCounter, &Font_7x10, 1);
+      /*
+      SSD1306_GotoXY(2, 32);
+      itoa(y, txtCounter, 10);
+      SSD1306_Puts(txtCounter, &Font_7x10, 1);
+      */       
+      SSD1306_UpdateScreen();
       
-      itoa(counterOpcao, txtCounter, 10); // Coloca valor do counter na txtCounter
-      //if (counterPrev != counterOpcao) // Atualiza tela so se mudar contador
-      //{
-        //SSD1306_Clear();
-        counterPrev = counterOpcao;
-        SSD1306_GotoXY(2, 2);
-        SSD1306_Puts(txtCounter, &Font_7x10, 1);
-        SSD1306_GotoXY(2, 12);
-        SSD1306_Puts("1 Outro Menu", &Font_7x10, 1);
-        SSD1306_GotoXY(2, 22);
-        itoa(TempCelsius, txtCounter, 10);
-        SSD1306_Puts(txtCounter, &Font_7x10, 1);
-        SSD1306_GotoXY(16, 22);
-        SSD1306_Puts(",", &Font_7x10, 1);
-        SSD1306_GotoXY(23, 22);
-        itoa(100*(TempCelsius-(int)TempCelsius), txtCounter, 10);  
-        SSD1306_Puts(txtCounter, &Font_7x10, 1);
-        
-        SSD1306_UpdateScreen();
-      //}
     }
     else if (MenuAtual==1)
-    {
-      
+    {      
       itoa(counterOpcao, txtCounter, 10); // Coloca valor do counter na txtCounter
       if (counterPrev != counterOpcao) // Atualiza tela so se mudar contador
       {
@@ -139,8 +174,7 @@ void MenuHandler(void)
         
         SSD1306_UpdateScreen();
       }
-    }
-    
+    }   
 }
 
 void ClickHandler(void)
@@ -169,11 +203,7 @@ void ClickHandler(void)
       MenuAtual = 0;
     }
   }
-  
-  
-  counterPrev = 99; // Forca a atualizar a tela
-  
-  
+  counterPrev = 99; // Forca a atualizar a tela 
 }
 /* USER CODE END PFP */
 
@@ -189,9 +219,7 @@ void ClickHandler(void)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  /*uint32_t i;
-  float Temp;
-  uint32_t counter = 0;*/
+  //OLED
   GPIO_PinState aState;
   GPIO_PinState aLastState = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6);
   uint32_t counter = 0;
@@ -221,6 +249,7 @@ int main(void)
   MX_I2C1_Init();
   MX_TIM4_Init();
   MX_ADC1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
   
@@ -229,21 +258,32 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   SSD1306_Init();
+
+  // Sentido Motor de Passo
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, 1);
+
+  //PID
+  setpoint = 20.0;
+  TempCelsius = 15.0;
+  kp = 1.0; //Calibrar depois
+  ki = 0.1;
+  kd = 0.01;
+  erroAnt = 0.0; //Qual o valor inicial?
+  yiAnt = 0.0;
+  ydAnt = 0.0;
+  Nd = 1;
+
+  // Timer de Aquecimento
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+
+  // Interrupt de passo
+  HAL_TIM_Base_Start_IT(&htim4);
   
   
 
   while (1)
   {
     
-    /*if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_RESET)
-    {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 1);
-    }
-    else
-    {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
-    }*/
 
     // Contador Rot Button
     aState = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6);
@@ -266,100 +306,37 @@ int main(void)
         counter = 0;
       }
     }
-
     aLastState = aState;
 
 
-    // OLED
-    /*
-    MenuHandler();
-    if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10))
-    {
-      ClickHandler();
-    }
-    */
+    // Sensor Temp
     HAL_ADC_Start(&hadc1);
     HAL_ADC_PollForConversion(&hadc1,100);
     TempVolts = HAL_ADC_GetValue(&hadc1);
     TempCelsius = ((TempVolts * 1.1 / (4095)) / 0.01);
+
     MenuHandler();
 
-    if(TempCelsius<20.0)
+    //calcPid();
+
+    if(TempCelsius<setpoint)
     {
-      //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 1);
     }
     else
     {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 0);
     }
     
   
     if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10))
     {
-      //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 1);
       ClickHandler();
     }
-    else
-    {
-      //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
-    }
 
-    //HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 1);
-    //HAL_Delay(1);
-    //HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
-    //HAL_Delay(1);
     
     
-    // update screen
-    /*for (i = 0; i < 8; i++)
-    {
-      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 0);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
-      //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, 1);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
-      HAL_Delay(2500);
-      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 1);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 1);
-      //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, 0);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
-      HAL_Delay(2500);
-    }*/
-    //HAL_Delay(800);
-
-    /*Temp = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5);
-    Temp = ((Temp * 1.1 / (1023)) / 0.01);
-
-    if (Temp < 25)
-    {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, 0);
-    }
-    else if (Temp >= 25 && Temp < 30)
-    {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 1);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, 0);
-    }
-    else if (Temp >= 30 && Temp < 35)
-    {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, 1);
-    }
-    else if (Temp >= 35 && Temp < 40)
-    {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 1);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, 1);
-    }
-    else
-    {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, 0);
-    }*/
+    
 
     /* USER CODE END WHILE */
 
@@ -493,7 +470,71 @@ static void MX_I2C1_Init(void)
 }
 
 /**
-  * @brief TIM4 Initialization Function
+  * @brief TIM2 Initialization Function for PWM
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 7200-1;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 10000;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 5000;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.Pulse = 10000;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+  HAL_TIM_MspPostInit(&htim2);
+
+}
+
+/**
+  * @brief TIM4 Initialization Function for Step Motor
   * @param None
   * @retval None
   */
@@ -532,7 +573,7 @@ static void MX_TIM4_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN TIM4_Init 2 */
-
+  tim4ms = (htim4.Init.Prescaler+1)*htim4.Init.Period/72000000.0;
   /* USER CODE END TIM4_Init 2 */
 
 }
@@ -556,7 +597,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_8|GPIO_PIN_10, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8|GPIO_PIN_10, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3|GPIO_PIN_4, GPIO_PIN_RESET);
@@ -567,13 +608,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PA1 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PA6 PA7 */
   GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7;

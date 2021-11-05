@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
   42              		.cfi_def_cfa 7, 32
   43 0006 0346     		mov	r3, r0
   44 0008 FB71     		strb	r3, [r7, #7]
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 2
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 2
 
 
   15:Core/Src/test.c ****     uint8_t x1, y1, x2, y2;
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
   86 004a 97F90F30 		ldrsb	r3, [r7, #15]
   21:Core/Src/test.c ****     	{
   87              		.loc 1 21 5 discriminator 1
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 3
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 3
 
 
   88 004e 002B     		cmp	r3, #0
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
   37:Core/Src/test.c **** 
   38:Core/Src/test.c ****     SSD1306_Clear ();
  129              		.loc 1 38 5
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 4
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 4
 
 
  130 0092 FFF7FEFF 		bl	SSD1306_Clear
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  172 00d6 002B     		cmp	r3, #0
  173 00d8 E6DA     		bge	.L7
   48:Core/Src/test.c ****     	}
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 5
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 5
 
 
   49:Core/Src/test.c ****     x2    = 0;
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  214 011a FFF7FEFF 		bl	SSD1306_Clear
   61:Core/Src/test.c **** 
   62:Core/Src/test.c ****     x1    = 0;
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 6
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 6
 
 
  215              		.loc 1 62 11
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
   71:Core/Src/test.c ****     x2    = SSD1306_WIDTH - 1;
  258              		.loc 1 71 11
  259 0162 7F23     		movs	r3, #127
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 7
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 7
 
 
  260 0164 FB73     		strb	r3, [r7, #15]
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  299              		.loc 1 84 11
  300 01a6 7F23     		movs	r3, #127
  301 01a8 3B73     		strb	r3, [r7, #12]
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 8
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 8
 
 
   85:Core/Src/test.c ****     y1    = SSD1306_HEIGHT - 1;
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  344 01ec FB73     		strb	r3, [r7, #15]
   94:Core/Src/test.c ****     for (y2 = 0; y2 < SSD1306_HEIGHT; y2 += 6)
  345              		.loc 1 94 13
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 9
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 9
 
 
  346 01ee 0023     		movs	r3, #0
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  393              		.align	1
  394              		.global	TestRectangles
  395              		.syntax unified
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 10
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 10
 
 
  396              		.thumb
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  437 0020 9BB2     		uxth	r3, r3
  438 0022 C3F14003 		rsb	r3, r3, #64
  439 0026 98B2     		uxth	r0, r3
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 11
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 11
 
 
  440 0028 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  490              	.LFB67:
  119:Core/Src/test.c **** 
  120:Core/Src/test.c **** void TestFilledRectangles (uint8_t color)
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 12
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 12
 
 
  121:Core/Src/test.c **** {
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  533 002a FB7A     		ldrb	r3, [r7, #11]	@ zero_extendqisi2
  534 002c 9BB2     		uxth	r3, r3
  535 002e D31A     		subs	r3, r2, r3
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 13
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 13
 
 
  536 0030 98B2     		uxth	r0, r3
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  585              		.fpu softvfp
  587              	TestFilledCircles:
  588              	.LFB68:
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 14
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 14
 
 
  137:Core/Src/test.c **** 
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  147:Core/Src/test.c ****         {
  148:Core/Src/test.c ****             SSD1306_DrawFilledCircle(x, y, radius, color);
  633              		.loc 1 148 13 discriminator 3
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 15
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 15
 
 
  634 002e FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  679              		@ sp needed
  680 0074 80BD     		pop	{r7, pc}
  681              		.cfi_endproc
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 16
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 16
 
 
  682              	.LFE68:
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  728              		.loc 1 163 12
  729 0026 0023     		movs	r3, #0
  730 0028 FB73     		strb	r3, [r7, #15]
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 17
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 17
 
 
  731              		.loc 1 163 5
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  775 006c 9A42     		cmp	r2, r3
  776 006e DDD3     		bcc	.L33
  170:Core/Src/test.c ****         }
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 18
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 18
 
 
  171:Core/Src/test.c ****     }
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  826 0010 7B73     		strb	r3, [r7, #13]
  178:Core/Src/test.c **** 
  179:Core/Src/test.c ****     SSD1306_Clear ();
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 19
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 19
 
 
  827              		.loc 1 179 5
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  876 006a 0291     		str	r1, [sp, #8]
  877 006c 0192     		str	r2, [sp, #4]
  878 006e 0093     		str	r3, [sp]
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 20
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 20
 
 
  879 0070 3346     		mov	r3, r6
@@ -1184,23 +1184,23 @@ ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 1
  913              	.Letext0:
  914              		.file 2 "c:\\arm-gcc\\tools\\gcc-arm-none-eabi-10-2020-q4-major\\arm-none-eabi\\include\\machine\\
  915              		.file 3 "c:\\arm-gcc\\tools\\gcc-arm-none-eabi-10-2020-q4-major\\arm-none-eabi\\include\\sys\\_std
-ARM GAS  C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s 			page 21
+ARM GAS  C:\Users\danie\AppData\Local\Temp\ccdypj2l.s 			page 21
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 test.c
-C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s:16     .text.TestLines:00000000 $t
-C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s:24     .text.TestLines:00000000 TestLines
-C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s:393    .text.TestRectangles:00000000 $t
-C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s:400    .text.TestRectangles:00000000 TestRectangles
-C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s:482    .text.TestFilledRectangles:00000000 $t
-C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s:489    .text.TestFilledRectangles:00000000 TestFilledRectangles
-C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s:580    .text.TestFilledCircles:00000000 $t
-C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s:587    .text.TestFilledCircles:00000000 TestFilledCircles
-C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s:685    .text.TestCircles:00000000 $t
-C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s:692    .text.TestCircles:00000000 TestCircles
-C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s:792    .text.TestTriangles:00000000 $t
-C:\Users\danie\AppData\Local\Temp\ccHvSrHE.s:799    .text.TestTriangles:00000000 TestTriangles
+C:\Users\danie\AppData\Local\Temp\ccdypj2l.s:16     .text.TestLines:00000000 $t
+C:\Users\danie\AppData\Local\Temp\ccdypj2l.s:24     .text.TestLines:00000000 TestLines
+C:\Users\danie\AppData\Local\Temp\ccdypj2l.s:393    .text.TestRectangles:00000000 $t
+C:\Users\danie\AppData\Local\Temp\ccdypj2l.s:400    .text.TestRectangles:00000000 TestRectangles
+C:\Users\danie\AppData\Local\Temp\ccdypj2l.s:482    .text.TestFilledRectangles:00000000 $t
+C:\Users\danie\AppData\Local\Temp\ccdypj2l.s:489    .text.TestFilledRectangles:00000000 TestFilledRectangles
+C:\Users\danie\AppData\Local\Temp\ccdypj2l.s:580    .text.TestFilledCircles:00000000 $t
+C:\Users\danie\AppData\Local\Temp\ccdypj2l.s:587    .text.TestFilledCircles:00000000 TestFilledCircles
+C:\Users\danie\AppData\Local\Temp\ccdypj2l.s:685    .text.TestCircles:00000000 $t
+C:\Users\danie\AppData\Local\Temp\ccdypj2l.s:692    .text.TestCircles:00000000 TestCircles
+C:\Users\danie\AppData\Local\Temp\ccdypj2l.s:792    .text.TestTriangles:00000000 $t
+C:\Users\danie\AppData\Local\Temp\ccdypj2l.s:799    .text.TestTriangles:00000000 TestTriangles
 
 UNDEFINED SYMBOLS
 SSD1306_Clear
