@@ -66,7 +66,9 @@ uint32_t TempVolts;
 float TempCelsius;
 
 //PID
-float setpoint, kp, ki, kd, y, erroInt, erroAnt, Ts, yiAnt, ydAnt, Nd, yPWM,tim4ms;
+float setpoint, kp, ki, kd, erroAtual, erroInt, erroAnt, Ts, yiAnt, ydAnt, Nd,tim4ms, y, yPWM;
+uint32_t yPWMint = 10000;
+float yp, yi, yd;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -77,13 +79,14 @@ static void MX_TIM4_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
+
 void calcPid(void){
     Ts = tim4ms;
-    float erroAtual, yp, yi, yd;
+    
     erroAtual = setpoint - TempCelsius;
     yp = kp*erroAtual;
     yi = ki*Ts*(erroAtual+erroAnt)/2.0 + yiAnt;
-    yd = kd*Nd*(erroAtual-erroAnt) + (1+Nd*Ts)*ydAnt;
+    yd = kd*Nd*(erroAtual-erroAnt) + (1-Nd*Ts)*ydAnt;
     y = yp+yi+yd;
 
     yiAnt = yi;
@@ -99,17 +102,15 @@ void calcPid(void){
       y = 0;
     }
 
-    if (y==0)
-    {
-      HAL_TIM_PWM_Stop_IT(&htim2, TIM_CHANNEL_2);
-    }
-    else
-    {
-      HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-      yPWM = htim2.Instance->ARR*(100-y)/100;
-      htim2.Instance->CCR1 = yPWM;
-    }
+    yPWM = 10000*(100-y)/100;
+    //yPWM = htim2.Instance->ARR*(100)/100;
+    htim2.Instance->CCR2 = yPWM;
+    
+
+    
 }
+
+
 
 void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim) // Interrupt do passo do motor
 {
@@ -117,17 +118,23 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim) // Interrupt do pa
   {
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 1); // Pino Step
     StepAlta = false;
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 1);
+    //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 1);
   }
   else
   {
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0); // Pino Step
     StepAlta = true;
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
+    //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
   }
-  //calcPid(); 
+  calcPid(); 
 }
 
+void fastPulse(void)
+{
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 1); // Pino Step
+  HAL_Delay(1);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0); // Pino Step
+}
 
 void MenuHandler(void)
 {
@@ -148,11 +155,17 @@ void MenuHandler(void)
       SSD1306_GotoXY(23, 22);
       itoa(100*(TempCelsius-(int)TempCelsius), txtCounter, 10);  
       SSD1306_Puts(txtCounter, &Font_7x10, 1);
-      /*
+      
       SSD1306_GotoXY(2, 32);
+      itoa(yp, txtCounter, 10);
+      SSD1306_Puts(txtCounter, &Font_7x10, 1);
+      SSD1306_GotoXY(2, 42);
+      itoa(yi, txtCounter, 10);
+      SSD1306_Puts(txtCounter, &Font_7x10, 1);
+      SSD1306_GotoXY(2, 52);
       itoa(y, txtCounter, 10);
       SSD1306_Puts(txtCounter, &Font_7x10, 1);
-      */       
+             
       SSD1306_UpdateScreen();
       
     }
@@ -264,19 +277,19 @@ int main(void)
 
   //PID
   setpoint = 20.0;
-  TempCelsius = 15.0;
-  kp = 1.0; //Calibrar depois
-  ki = 0.1;
-  kd = 0.01;
+  TempCelsius = 13.0;
+  kp = 5.0; //Calibrar depois
+  ki = 0.05;
+  kd = 0;
   erroAnt = 0.0; //Qual o valor inicial?
   yiAnt = 0.0;
   ydAnt = 0.0;
-  Nd = 1;
+  Nd = 1; // Filtro
 
   // Timer de Aquecimento
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
 
-  // Interrupt de passo
+  // Interrupt de passo / PID
   HAL_TIM_Base_Start_IT(&htim4);
   
   
@@ -333,6 +346,10 @@ int main(void)
     {
       ClickHandler();
     }
+
+    
+
+
 
     
     
@@ -470,7 +487,7 @@ static void MX_I2C1_Init(void)
 }
 
 /**
-  * @brief TIM2 Initialization Function for PWM
+  * @brief TIM2 Initialization Function
   * @param None
   * @retval None
   */
@@ -514,15 +531,10 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 5000;
+  sConfigOC.Pulse = 10000;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.Pulse = 10000;
-  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
   {
     Error_Handler();
   }
@@ -534,7 +546,7 @@ static void MX_TIM2_Init(void)
 }
 
 /**
-  * @brief TIM4 Initialization Function for Step Motor
+  * @brief TIM4 Initialization Function
   * @param None
   * @retval None
   */
