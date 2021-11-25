@@ -63,10 +63,11 @@ _Bool StepAlta = true;
 
 // LM35
 uint32_t TempVolts;
-float TempCelsius;
+float TempCelsius, TempCelsiusUser;
+float TempCelsiusMed, TempSoma = 0.0;
 
 //PID
-float setpoint, kp, ki, kd, erroAtual, erroInt, erroAnt, Ts, yiAnt, ydAnt, Nd,tim4ms, y, yPWM;
+float setpoint, setpointUser, kp, ki, kd, erroAtual, erroInt, erroAnt, Ts, yiAnt, ydAnt, Nd,tim4ms, y, yPWM;
 uint32_t yPWMint = 10000;
 float yp, yi, yd;
 /* USER CODE END PV */
@@ -82,8 +83,9 @@ static void MX_TIM2_Init(void);
 
 void calcPid(void){
     Ts = tim4ms;
+    TempCelsiusUser = (TempCelsiusMed-7.34)/0.269;
     
-    erroAtual = setpoint - TempCelsius;
+    erroAtual = setpoint - TempCelsiusMed;
     yp = kp*erroAtual;
     yi = ki*Ts*(erroAtual+erroAnt)/2.0 + yiAnt;
     yd = kd*Nd*(erroAtual-erroAnt) + (1-Nd*Ts)*ydAnt;
@@ -126,7 +128,7 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim) // Interrupt do pa
     StepAlta = true;
     //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
   }
-  calcPid(); 
+  //calcPid(); 
 }
 
 void fastPulse(void)
@@ -148,12 +150,12 @@ void MenuHandler(void)
       SSD1306_GotoXY(2, 12);
       SSD1306_Puts("1 Outro Menu", &Font_7x10, 1);
       SSD1306_GotoXY(2, 22);
-      itoa(TempCelsius, txtCounter, 10);
+      itoa(TempCelsiusUser, txtCounter, 10);
       SSD1306_Puts(txtCounter, &Font_7x10, 1);
       SSD1306_GotoXY(16, 22);
       SSD1306_Puts(",", &Font_7x10, 1);
       SSD1306_GotoXY(23, 22);
-      itoa(100*(TempCelsius-(int)TempCelsius), txtCounter, 10);  
+      itoa(100*(TempCelsiusUser-(int)TempCelsiusUser), txtCounter, 10);  
       SSD1306_Puts(txtCounter, &Font_7x10, 1);
       
       SSD1306_GotoXY(2, 32);
@@ -236,6 +238,7 @@ int main(void)
   GPIO_PinState aState;
   GPIO_PinState aLastState = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6);
   uint32_t counter = 0;
+  uint32_t iMedia = 1;
   
   
 
@@ -276,11 +279,12 @@ int main(void)
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, 1);
 
   //PID
-  setpoint = 20.0;
+  setpointUser = 37;
+  setpoint = setpointUser*0.269+7.34;
   TempCelsius = 13.0;
   kp = 5.0; //Calibrar depois
-  ki = 0.05;
-  kd = 0;
+  ki = 0.03;
+  kd = 0.08;
   erroAnt = 0.0; //Qual o valor inicial?
   yiAnt = 0.0;
   ydAnt = 0.0;
@@ -326,7 +330,23 @@ int main(void)
     HAL_ADC_Start(&hadc1);
     HAL_ADC_PollForConversion(&hadc1,100);
     TempVolts = HAL_ADC_GetValue(&hadc1);
-    TempCelsius = ((TempVolts * 1.1 / (4095)) / 0.01);
+    TempCelsius = ((TempVolts * 1.1 / (4095)) / 0.01); 
+    TempCelsiusUser = (TempCelsiusMed-7.34)/0.269; // Calibracao com regressao linear
+
+    if(iMedia<=10)
+    {
+      TempSoma = TempSoma + TempCelsius;
+      iMedia++;
+    }
+    else
+    {
+      TempCelsiusMed = TempSoma/10.0;
+      iMedia = 1;
+      TempSoma = 0.0;
+    }
+    
+
+
 
     MenuHandler();
 
