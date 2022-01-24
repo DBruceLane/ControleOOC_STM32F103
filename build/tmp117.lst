@@ -1,0 +1,2781 @@
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"tmp117.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.global	TMP117_DeviceID
+  16              		.section	.data.TMP117_DeviceID,"aw"
+  19              	TMP117_DeviceID:
+  20 0000 90       		.byte	-112
+  21              		.global	__aeabi_i2d
+  22              		.global	__aeabi_dmul
+  23              		.global	__aeabi_d2f
+  24              		.global	__aeabi_fdiv
+  25              		.section	.text.TMP117_get_Temperature,"ax",%progbits
+  26              		.align	1
+  27              		.global	TMP117_get_Temperature
+  28              		.arch armv7-m
+  29              		.syntax unified
+  30              		.thumb
+  31              		.thumb_func
+  32              		.fpu softvfp
+  34              	TMP117_get_Temperature:
+  35              	.LFB65:
+  36              		.file 1 "Core/Src/tmp117.c"
+   1:Core/Src/tmp117.c **** /*
+   2:Core/Src/tmp117.c ****   @
+   3:Core/Src/tmp117.c ****   @   Date               :        30.11.2018 / Sunday
+   4:Core/Src/tmp117.c ****   @
+   5:Core/Src/tmp117.c ****   @   Contact            :        Writing by Muhammet Rasit KIYAK                    @https://www.l
+   6:Core/Src/tmp117.c ****   @                               mrstkyk@gmail.com 
+   7:Core/Src/tmp117.c ****   @
+   8:Core/Src/tmp117.c ****   @   Description        :        This Library for TMP117/TMP116 Temperature Sensor on Texas Instru
+   9:Core/Src/tmp117.c ****   @                               Dependency library is HAL for STM32 series (__STM32xx_HAL_I2C_H)
+  10:Core/Src/tmp117.c ****   @
+  11:Core/Src/tmp117.c **** */
+  12:Core/Src/tmp117.c **** 
+  13:Core/Src/tmp117.c **** #include "tmp117.h"
+  14:Core/Src/tmp117.c **** 
+  15:Core/Src/tmp117.c **** uint8_t TMP117_DeviceID=TMP117_DeviceID1;
+  16:Core/Src/tmp117.c **** 
+  17:Core/Src/tmp117.c **** /*  
+  18:Core/Src/tmp117.c ****    @Brief         Get temperature basically
+  19:Core/Src/tmp117.c ****    @Description   Function gives to us ambient temperature
+  20:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+  21:Core/Src/tmp117.c ****    @Return value  Float
+  22:Core/Src/tmp117.c ****  */
+  23:Core/Src/tmp117.c **** HAL_StatusTypeDef TMP117_get_Temperature             (I2C_HandleTypeDef i2c, float* temp)
+  24:Core/Src/tmp117.c **** {
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 2
+
+
+  37              		.loc 1 24 1
+  38              		.cfi_startproc
+  39              		@ args = 88, pretend = 16, frame = 8
+  40              		@ frame_needed = 1, uses_anonymous_args = 0
+  41 0000 84B0     		sub	sp, sp, #16
+  42              	.LCFI0:
+  43              		.cfi_def_cfa_offset 16
+  44 0002 80B5     		push	{r7, lr}
+  45              	.LCFI1:
+  46              		.cfi_def_cfa_offset 24
+  47              		.cfi_offset 7, -24
+  48              		.cfi_offset 14, -20
+  49 0004 84B0     		sub	sp, sp, #16
+  50              	.LCFI2:
+  51              		.cfi_def_cfa_offset 40
+  52 0006 02AF     		add	r7, sp, #8
+  53              	.LCFI3:
+  54              		.cfi_def_cfa 7, 32
+  55 0008 07F1100C 		add	ip, r7, #16
+  56 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+  25:Core/Src/tmp117.c ****       static uint8_t buf[3];
+  26:Core/Src/tmp117.c ****       HAL_StatusTypeDef ret;
+  27:Core/Src/tmp117.c ****       uint32_t tries=0;
+  57              		.loc 1 27 16
+  58 0010 0023     		movs	r3, #0
+  59 0012 7B60     		str	r3, [r7, #4]
+  28:Core/Src/tmp117.c ****       float val;
+  29:Core/Src/tmp117.c **** 
+  30:Core/Src/tmp117.c ****       buf[0]=TMP117_TemperatureRegister;
+  60              		.loc 1 30 13
+  61 0014 304B     		ldr	r3, .L10
+  62 0016 0022     		movs	r2, #0
+  63 0018 1A70     		strb	r2, [r3]
+  31:Core/Src/tmp117.c ****       
+  32:Core/Src/tmp117.c ****       while(tries<10&&HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,1,100)!=HAL_OK)
+  64              		.loc 1 32 12
+  65 001a 02E0     		b	.L2
+  66              	.L4:
+  33:Core/Src/tmp117.c ****       {
+  34:Core/Src/tmp117.c ****             tries++;
+  67              		.loc 1 34 18
+  68 001c 7B68     		ldr	r3, [r7, #4]
+  69 001e 0133     		adds	r3, r3, #1
+  70 0020 7B60     		str	r3, [r7, #4]
+  71              	.L2:
+  32:Core/Src/tmp117.c ****       {
+  72              		.loc 1 32 12
+  73 0022 7B68     		ldr	r3, [r7, #4]
+  74 0024 092B     		cmp	r3, #9
+  75 0026 0DD8     		bhi	.L3
+  32:Core/Src/tmp117.c ****       {
+  76              		.loc 1 32 23 discriminator 1
+  77 0028 2C4B     		ldr	r3, .L10+4
+  78 002a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  79 002c 99B2     		uxth	r1, r3
+  80 002e 6423     		movs	r3, #100
+  81 0030 0093     		str	r3, [sp]
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 3
+
+
+  82 0032 0123     		movs	r3, #1
+  83 0034 284A     		ldr	r2, .L10
+  84 0036 07F11000 		add	r0, r7, #16
+  85 003a FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+  86 003e 0346     		mov	r3, r0
+  32:Core/Src/tmp117.c ****       {
+  87              		.loc 1 32 21 discriminator 1
+  88 0040 002B     		cmp	r3, #0
+  89 0042 EBD1     		bne	.L4
+  90              	.L3:
+  35:Core/Src/tmp117.c ****       }
+  36:Core/Src/tmp117.c ****       HAL_Delay(1);
+  91              		.loc 1 36 7
+  92 0044 0120     		movs	r0, #1
+  93 0046 FFF7FEFF 		bl	HAL_Delay
+  37:Core/Src/tmp117.c ****       tries=0;
+  94              		.loc 1 37 12
+  95 004a 0023     		movs	r3, #0
+  96 004c 7B60     		str	r3, [r7, #4]
+  38:Core/Src/tmp117.c ****       while(tries<10&&HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100)!=HAL_OK)
+  97              		.loc 1 38 12
+  98 004e 02E0     		b	.L5
+  99              	.L7:
+  39:Core/Src/tmp117.c ****       {
+  40:Core/Src/tmp117.c ****             tries++;
+ 100              		.loc 1 40 18
+ 101 0050 7B68     		ldr	r3, [r7, #4]
+ 102 0052 0133     		adds	r3, r3, #1
+ 103 0054 7B60     		str	r3, [r7, #4]
+ 104              	.L5:
+  38:Core/Src/tmp117.c ****       while(tries<10&&HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100)!=HAL_OK)
+ 105              		.loc 1 38 12
+ 106 0056 7B68     		ldr	r3, [r7, #4]
+ 107 0058 092B     		cmp	r3, #9
+ 108 005a 0DD8     		bhi	.L6
+  38:Core/Src/tmp117.c ****       while(tries<10&&HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100)!=HAL_OK)
+ 109              		.loc 1 38 23 discriminator 1
+ 110 005c 1F4B     		ldr	r3, .L10+4
+ 111 005e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 112 0060 99B2     		uxth	r1, r3
+ 113 0062 6423     		movs	r3, #100
+ 114 0064 0093     		str	r3, [sp]
+ 115 0066 0223     		movs	r3, #2
+ 116 0068 1B4A     		ldr	r2, .L10
+ 117 006a 07F11000 		add	r0, r7, #16
+ 118 006e FFF7FEFF 		bl	HAL_I2C_Master_Receive
+ 119 0072 0346     		mov	r3, r0
+  38:Core/Src/tmp117.c ****       while(tries<10&&HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100)!=HAL_OK)
+ 120              		.loc 1 38 21 discriminator 1
+ 121 0074 002B     		cmp	r3, #0
+ 122 0076 EBD1     		bne	.L7
+ 123              	.L6:
+  41:Core/Src/tmp117.c ****       }
+  42:Core/Src/tmp117.c ****       if(tries<10)
+ 124              		.loc 1 42 9
+ 125 0078 7B68     		ldr	r3, [r7, #4]
+ 126 007a 092B     		cmp	r3, #9
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 4
+
+
+ 127 007c 19D8     		bhi	.L8
+  43:Core/Src/tmp117.c ****       {      
+  44:Core/Src/tmp117.c ****             *temp = ((((buf[0]<<8)|buf[1]))*0.0078125);
+ 128              		.loc 1 44 28
+ 129 007e 164B     		ldr	r3, .L10
+ 130 0080 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 131              		.loc 1 44 31
+ 132 0082 1B02     		lsls	r3, r3, #8
+ 133              		.loc 1 44 39
+ 134 0084 144A     		ldr	r2, .L10
+ 135 0086 5278     		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+ 136              		.loc 1 44 35
+ 137 0088 1343     		orrs	r3, r3, r2
+ 138              		.loc 1 44 44
+ 139 008a 1846     		mov	r0, r3
+ 140 008c FFF7FEFF 		bl	__aeabi_i2d
+ 141 0090 4FF00002 		mov	r2, #0
+ 142 0094 4FF07E53 		mov	r3, #1065353216
+ 143 0098 FFF7FEFF 		bl	__aeabi_dmul
+ 144 009c 0246     		mov	r2, r0
+ 145 009e 0B46     		mov	r3, r1
+ 146 00a0 1046     		mov	r0, r2
+ 147 00a2 1946     		mov	r1, r3
+ 148 00a4 FFF7FEFF 		bl	__aeabi_d2f
+ 149 00a8 0246     		mov	r2, r0
+ 150              		.loc 1 44 19
+ 151 00aa 7B6E     		ldr	r3, [r7, #100]
+ 152 00ac 1A60     		str	r2, [r3]	@ float
+  45:Core/Src/tmp117.c ****             return HAL_OK;
+ 153              		.loc 1 45 20
+ 154 00ae 0023     		movs	r3, #0
+ 155 00b0 0AE0     		b	.L9
+ 156              	.L8:
+  46:Core/Src/tmp117.c ****       }
+  47:Core/Src/tmp117.c ****       else
+  48:Core/Src/tmp117.c ****       {            
+  49:Core/Src/tmp117.c ****             *temp =  0.0/0.0;
+ 157              		.loc 1 49 25
+ 158 00b2 4FF00001 		mov	r1, #0
+ 159 00b6 4FF00000 		mov	r0, #0
+ 160 00ba FFF7FEFF 		bl	__aeabi_fdiv
+ 161 00be 0346     		mov	r3, r0
+ 162 00c0 1A46     		mov	r2, r3
+ 163              		.loc 1 49 19
+ 164 00c2 7B6E     		ldr	r3, [r7, #100]
+ 165 00c4 1A60     		str	r2, [r3]	@ float
+  50:Core/Src/tmp117.c ****             return HAL_ERROR;
+ 166              		.loc 1 50 20
+ 167 00c6 0123     		movs	r3, #1
+ 168              	.L9:
+  51:Core/Src/tmp117.c ****       }
+  52:Core/Src/tmp117.c **** }
+ 169              		.loc 1 52 1
+ 170 00c8 1846     		mov	r0, r3
+ 171 00ca 0837     		adds	r7, r7, #8
+ 172              	.LCFI4:
+ 173              		.cfi_def_cfa_offset 24
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 5
+
+
+ 174 00cc BD46     		mov	sp, r7
+ 175              	.LCFI5:
+ 176              		.cfi_def_cfa_register 13
+ 177              		@ sp needed
+ 178 00ce BDE88040 		pop	{r7, lr}
+ 179              	.LCFI6:
+ 180              		.cfi_restore 14
+ 181              		.cfi_restore 7
+ 182              		.cfi_def_cfa_offset 16
+ 183 00d2 04B0     		add	sp, sp, #16
+ 184              	.LCFI7:
+ 185              		.cfi_def_cfa_offset 0
+ 186 00d4 7047     		bx	lr
+ 187              	.L11:
+ 188 00d6 00BF     		.align	2
+ 189              	.L10:
+ 190 00d8 00000000 		.word	buf.17
+ 191 00dc 00000000 		.word	TMP117_DeviceID
+ 192              		.cfi_endproc
+ 193              	.LFE65:
+ 195              		.section	.text.TMP117_get_Configuration,"ax",%progbits
+ 196              		.align	1
+ 197              		.global	TMP117_get_Configuration
+ 198              		.syntax unified
+ 199              		.thumb
+ 200              		.thumb_func
+ 201              		.fpu softvfp
+ 203              	TMP117_get_Configuration:
+ 204              	.LFB66:
+  53:Core/Src/tmp117.c **** 
+  54:Core/Src/tmp117.c **** /*  
+  55:Core/Src/tmp117.c ****    @Brief         Get Configuration
+  56:Core/Src/tmp117.c ****    @Description   Get Configuration Register Value
+  57:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+  58:Core/Src/tmp117.c ****    @Return value  uint16_t
+  59:Core/Src/tmp117.c ****  */
+  60:Core/Src/tmp117.c **** uint16_t TMP117_get_Configuration     (I2C_HandleTypeDef i2c)
+  61:Core/Src/tmp117.c **** {
+ 205              		.loc 1 61 1
+ 206              		.cfi_startproc
+ 207              		@ args = 84, pretend = 16, frame = 0
+ 208              		@ frame_needed = 1, uses_anonymous_args = 0
+ 209 0000 84B0     		sub	sp, sp, #16
+ 210              	.LCFI8:
+ 211              		.cfi_def_cfa_offset 16
+ 212 0002 80B5     		push	{r7, lr}
+ 213              	.LCFI9:
+ 214              		.cfi_def_cfa_offset 24
+ 215              		.cfi_offset 7, -24
+ 216              		.cfi_offset 14, -20
+ 217 0004 82B0     		sub	sp, sp, #8
+ 218              	.LCFI10:
+ 219              		.cfi_def_cfa_offset 32
+ 220 0006 02AF     		add	r7, sp, #8
+ 221              	.LCFI11:
+ 222              		.cfi_def_cfa 7, 24
+ 223 0008 07F1080C 		add	ip, r7, #8
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 6
+
+
+ 224 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+  62:Core/Src/tmp117.c ****       static uint8_t buf[3];
+  63:Core/Src/tmp117.c ****       buf[0]=TMP117_ConfigurationRegister;
+ 225              		.loc 1 63 13
+ 226 0010 154B     		ldr	r3, .L14
+ 227 0012 0122     		movs	r2, #1
+ 228 0014 1A70     		strb	r2, [r3]
+  64:Core/Src/tmp117.c ****       
+  65:Core/Src/tmp117.c ****       HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,1,100);
+ 229              		.loc 1 65 7
+ 230 0016 154B     		ldr	r3, .L14+4
+ 231 0018 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 232 001a 99B2     		uxth	r1, r3
+ 233 001c 6423     		movs	r3, #100
+ 234 001e 0093     		str	r3, [sp]
+ 235 0020 0123     		movs	r3, #1
+ 236 0022 114A     		ldr	r2, .L14
+ 237 0024 07F10800 		add	r0, r7, #8
+ 238 0028 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+  66:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 239              		.loc 1 66 7
+ 240 002c 0120     		movs	r0, #1
+ 241 002e FFF7FEFF 		bl	HAL_Delay
+  67:Core/Src/tmp117.c ****       HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100);
+ 242              		.loc 1 67 7
+ 243 0032 0E4B     		ldr	r3, .L14+4
+ 244 0034 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 245 0036 99B2     		uxth	r1, r3
+ 246 0038 6423     		movs	r3, #100
+ 247 003a 0093     		str	r3, [sp]
+ 248 003c 0223     		movs	r3, #2
+ 249 003e 0A4A     		ldr	r2, .L14
+ 250 0040 07F10800 		add	r0, r7, #8
+ 251 0044 FFF7FEFF 		bl	HAL_I2C_Master_Receive
+  68:Core/Src/tmp117.c ****       return ((buf[0]<<8)|buf[1]);
+ 252              		.loc 1 68 19
+ 253 0048 074B     		ldr	r3, .L14
+ 254 004a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 255              		.loc 1 68 22
+ 256 004c 1B02     		lsls	r3, r3, #8
+ 257              		.loc 1 68 26
+ 258 004e 1AB2     		sxth	r2, r3
+ 259              		.loc 1 68 30
+ 260 0050 054B     		ldr	r3, .L14
+ 261 0052 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 262 0054 1BB2     		sxth	r3, r3
+ 263              		.loc 1 68 26
+ 264 0056 1343     		orrs	r3, r3, r2
+ 265 0058 1BB2     		sxth	r3, r3
+ 266 005a 9BB2     		uxth	r3, r3
+  69:Core/Src/tmp117.c **** }
+ 267              		.loc 1 69 1
+ 268 005c 1846     		mov	r0, r3
+ 269 005e BD46     		mov	sp, r7
+ 270              	.LCFI12:
+ 271              		.cfi_def_cfa_register 13
+ 272              		@ sp needed
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 7
+
+
+ 273 0060 BDE88040 		pop	{r7, lr}
+ 274              	.LCFI13:
+ 275              		.cfi_restore 14
+ 276              		.cfi_restore 7
+ 277              		.cfi_def_cfa_offset 16
+ 278 0064 04B0     		add	sp, sp, #16
+ 279              	.LCFI14:
+ 280              		.cfi_def_cfa_offset 0
+ 281 0066 7047     		bx	lr
+ 282              	.L15:
+ 283              		.align	2
+ 284              	.L14:
+ 285 0068 00000000 		.word	buf.16
+ 286 006c 00000000 		.word	TMP117_DeviceID
+ 287              		.cfi_endproc
+ 288              	.LFE66:
+ 290              		.section	.text.TMP117_set_Configuration,"ax",%progbits
+ 291              		.align	1
+ 292              		.global	TMP117_set_Configuration
+ 293              		.syntax unified
+ 294              		.thumb
+ 295              		.thumb_func
+ 296              		.fpu softvfp
+ 298              	TMP117_set_Configuration:
+ 299              	.LFB67:
+  70:Core/Src/tmp117.c **** 
+  71:Core/Src/tmp117.c **** /*  
+  72:Core/Src/tmp117.c ****    @Brief         Set Configuration
+  73:Core/Src/tmp117.c ****    @Description   Set Configuration Register for Features
+  74:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+  75:Core/Src/tmp117.c ****                   uint8_t first     ->  [15:8]  
+  76:Core/Src/tmp117.c ****                   uint8_t second    ->  [7:0]
+  77:Core/Src/tmp117.c ****    @Return value  void
+  78:Core/Src/tmp117.c ****  */
+  79:Core/Src/tmp117.c **** HAL_StatusTypeDef TMP117_set_Configuration            (I2C_HandleTypeDef i2c,uint8_t first,uint8_t 
+  80:Core/Src/tmp117.c **** {
+ 300              		.loc 1 80 1
+ 301              		.cfi_startproc
+ 302              		@ args = 92, pretend = 16, frame = 8
+ 303              		@ frame_needed = 1, uses_anonymous_args = 0
+ 304 0000 84B0     		sub	sp, sp, #16
+ 305              	.LCFI15:
+ 306              		.cfi_def_cfa_offset 16
+ 307 0002 80B5     		push	{r7, lr}
+ 308              	.LCFI16:
+ 309              		.cfi_def_cfa_offset 24
+ 310              		.cfi_offset 7, -24
+ 311              		.cfi_offset 14, -20
+ 312 0004 84B0     		sub	sp, sp, #16
+ 313              	.LCFI17:
+ 314              		.cfi_def_cfa_offset 40
+ 315 0006 02AF     		add	r7, sp, #8
+ 316              	.LCFI18:
+ 317              		.cfi_def_cfa 7, 32
+ 318 0008 07F1100C 		add	ip, r7, #16
+ 319 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+  81:Core/Src/tmp117.c ****       HAL_StatusTypeDef ret;
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 8
+
+
+  82:Core/Src/tmp117.c ****       static uint8_t buf[3];
+  83:Core/Src/tmp117.c ****       buf[0]=TMP117_ConfigurationRegister;
+ 320              		.loc 1 83 13
+ 321 0010 114B     		ldr	r3, .L18
+ 322 0012 0122     		movs	r2, #1
+ 323 0014 1A70     		strb	r2, [r3]
+  84:Core/Src/tmp117.c ****       buf[1]=first;     
+ 324              		.loc 1 84 13
+ 325 0016 104A     		ldr	r2, .L18
+ 326 0018 97F86430 		ldrb	r3, [r7, #100]
+ 327 001c 5370     		strb	r3, [r2, #1]
+  85:Core/Src/tmp117.c ****       buf[2]=second;    
+ 328              		.loc 1 85 13
+ 329 001e 0E4A     		ldr	r2, .L18
+ 330 0020 97F86830 		ldrb	r3, [r7, #104]
+ 331 0024 9370     		strb	r3, [r2, #2]
+  86:Core/Src/tmp117.c **** 
+  87:Core/Src/tmp117.c ****       ret = HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,3,100);
+ 332              		.loc 1 87 13
+ 333 0026 0D4B     		ldr	r3, .L18+4
+ 334 0028 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 335 002a 99B2     		uxth	r1, r3
+ 336 002c 6423     		movs	r3, #100
+ 337 002e 0093     		str	r3, [sp]
+ 338 0030 0323     		movs	r3, #3
+ 339 0032 094A     		ldr	r2, .L18
+ 340 0034 07F11000 		add	r0, r7, #16
+ 341 0038 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 342 003c 0346     		mov	r3, r0
+ 343 003e FB71     		strb	r3, [r7, #7]
+  88:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 344              		.loc 1 88 7
+ 345 0040 0120     		movs	r0, #1
+ 346 0042 FFF7FEFF 		bl	HAL_Delay
+  89:Core/Src/tmp117.c ****       return ret;
+ 347              		.loc 1 89 14
+ 348 0046 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  90:Core/Src/tmp117.c **** }
+ 349              		.loc 1 90 1
+ 350 0048 1846     		mov	r0, r3
+ 351 004a 0837     		adds	r7, r7, #8
+ 352              	.LCFI19:
+ 353              		.cfi_def_cfa_offset 24
+ 354 004c BD46     		mov	sp, r7
+ 355              	.LCFI20:
+ 356              		.cfi_def_cfa_register 13
+ 357              		@ sp needed
+ 358 004e BDE88040 		pop	{r7, lr}
+ 359              	.LCFI21:
+ 360              		.cfi_restore 14
+ 361              		.cfi_restore 7
+ 362              		.cfi_def_cfa_offset 16
+ 363 0052 04B0     		add	sp, sp, #16
+ 364              	.LCFI22:
+ 365              		.cfi_def_cfa_offset 0
+ 366 0054 7047     		bx	lr
+ 367              	.L19:
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 9
+
+
+ 368 0056 00BF     		.align	2
+ 369              	.L18:
+ 370 0058 00000000 		.word	buf.15
+ 371 005c 00000000 		.word	TMP117_DeviceID
+ 372              		.cfi_endproc
+ 373              	.LFE67:
+ 375              		.section	.text.TMP117_set_HighLimit,"ax",%progbits
+ 376              		.align	1
+ 377              		.global	TMP117_set_HighLimit
+ 378              		.syntax unified
+ 379              		.thumb
+ 380              		.thumb_func
+ 381              		.fpu softvfp
+ 383              	TMP117_set_HighLimit:
+ 384              	.LFB68:
+  91:Core/Src/tmp117.c **** 
+  92:Core/Src/tmp117.c **** /*  
+  93:Core/Src/tmp117.c ****    @Brief         Set HighLimit
+  94:Core/Src/tmp117.c ****    @Description   Set HighLimit for Alert
+  95:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+  96:Core/Src/tmp117.c ****                   uint8_t first     ->  [15:8]  
+  97:Core/Src/tmp117.c ****                   uint8_t second    ->  [7:0]
+  98:Core/Src/tmp117.c ****    @Return value  void
+  99:Core/Src/tmp117.c ****  */
+ 100:Core/Src/tmp117.c **** HAL_StatusTypeDef TMP117_set_HighLimit                (I2C_HandleTypeDef i2c,uint8_t first,uint8_t 
+ 101:Core/Src/tmp117.c **** {
+ 385              		.loc 1 101 1
+ 386              		.cfi_startproc
+ 387              		@ args = 92, pretend = 16, frame = 8
+ 388              		@ frame_needed = 1, uses_anonymous_args = 0
+ 389 0000 84B0     		sub	sp, sp, #16
+ 390              	.LCFI23:
+ 391              		.cfi_def_cfa_offset 16
+ 392 0002 80B5     		push	{r7, lr}
+ 393              	.LCFI24:
+ 394              		.cfi_def_cfa_offset 24
+ 395              		.cfi_offset 7, -24
+ 396              		.cfi_offset 14, -20
+ 397 0004 84B0     		sub	sp, sp, #16
+ 398              	.LCFI25:
+ 399              		.cfi_def_cfa_offset 40
+ 400 0006 02AF     		add	r7, sp, #8
+ 401              	.LCFI26:
+ 402              		.cfi_def_cfa 7, 32
+ 403 0008 07F1100C 		add	ip, r7, #16
+ 404 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 102:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 103:Core/Src/tmp117.c ****       HAL_StatusTypeDef ret;
+ 104:Core/Src/tmp117.c ****       buf[0]=TMP117_TemperatureHighLimit;
+ 405              		.loc 1 104 13
+ 406 0010 114B     		ldr	r3, .L22
+ 407 0012 0222     		movs	r2, #2
+ 408 0014 1A70     		strb	r2, [r3]
+ 105:Core/Src/tmp117.c ****       buf[1]=first;     
+ 409              		.loc 1 105 13
+ 410 0016 104A     		ldr	r2, .L22
+ 411 0018 97F86430 		ldrb	r3, [r7, #100]
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 10
+
+
+ 412 001c 5370     		strb	r3, [r2, #1]
+ 106:Core/Src/tmp117.c ****       buf[2]=second;    
+ 413              		.loc 1 106 13
+ 414 001e 0E4A     		ldr	r2, .L22
+ 415 0020 97F86830 		ldrb	r3, [r7, #104]
+ 416 0024 9370     		strb	r3, [r2, #2]
+ 107:Core/Src/tmp117.c **** 
+ 108:Core/Src/tmp117.c ****       ret = HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,3,100);
+ 417              		.loc 1 108 13
+ 418 0026 0D4B     		ldr	r3, .L22+4
+ 419 0028 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 420 002a 99B2     		uxth	r1, r3
+ 421 002c 6423     		movs	r3, #100
+ 422 002e 0093     		str	r3, [sp]
+ 423 0030 0323     		movs	r3, #3
+ 424 0032 094A     		ldr	r2, .L22
+ 425 0034 07F11000 		add	r0, r7, #16
+ 426 0038 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 427 003c 0346     		mov	r3, r0
+ 428 003e FB71     		strb	r3, [r7, #7]
+ 109:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 429              		.loc 1 109 7
+ 430 0040 0120     		movs	r0, #1
+ 431 0042 FFF7FEFF 		bl	HAL_Delay
+ 110:Core/Src/tmp117.c ****       return ret;
+ 432              		.loc 1 110 14
+ 433 0046 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 111:Core/Src/tmp117.c ****       
+ 112:Core/Src/tmp117.c **** }
+ 434              		.loc 1 112 1
+ 435 0048 1846     		mov	r0, r3
+ 436 004a 0837     		adds	r7, r7, #8
+ 437              	.LCFI27:
+ 438              		.cfi_def_cfa_offset 24
+ 439 004c BD46     		mov	sp, r7
+ 440              	.LCFI28:
+ 441              		.cfi_def_cfa_register 13
+ 442              		@ sp needed
+ 443 004e BDE88040 		pop	{r7, lr}
+ 444              	.LCFI29:
+ 445              		.cfi_restore 14
+ 446              		.cfi_restore 7
+ 447              		.cfi_def_cfa_offset 16
+ 448 0052 04B0     		add	sp, sp, #16
+ 449              	.LCFI30:
+ 450              		.cfi_def_cfa_offset 0
+ 451 0054 7047     		bx	lr
+ 452              	.L23:
+ 453 0056 00BF     		.align	2
+ 454              	.L22:
+ 455 0058 00000000 		.word	buf.14
+ 456 005c 00000000 		.word	TMP117_DeviceID
+ 457              		.cfi_endproc
+ 458              	.LFE68:
+ 460              		.section	.text.TMP117_get_HighLimit,"ax",%progbits
+ 461              		.align	1
+ 462              		.global	TMP117_get_HighLimit
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 11
+
+
+ 463              		.syntax unified
+ 464              		.thumb
+ 465              		.thumb_func
+ 466              		.fpu softvfp
+ 468              	TMP117_get_HighLimit:
+ 469              	.LFB69:
+ 113:Core/Src/tmp117.c **** 
+ 114:Core/Src/tmp117.c **** /*  
+ 115:Core/Src/tmp117.c ****    @Brief         Get Highlimit
+ 116:Core/Src/tmp117.c ****    @Description   Get Highlimit Register Value
+ 117:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 118:Core/Src/tmp117.c ****    @Return value  uint16_t
+ 119:Core/Src/tmp117.c ****  */
+ 120:Core/Src/tmp117.c **** uint16_t TMP117_get_HighLimit         (I2C_HandleTypeDef i2c)
+ 121:Core/Src/tmp117.c **** {
+ 470              		.loc 1 121 1
+ 471              		.cfi_startproc
+ 472              		@ args = 84, pretend = 16, frame = 0
+ 473              		@ frame_needed = 1, uses_anonymous_args = 0
+ 474 0000 84B0     		sub	sp, sp, #16
+ 475              	.LCFI31:
+ 476              		.cfi_def_cfa_offset 16
+ 477 0002 80B5     		push	{r7, lr}
+ 478              	.LCFI32:
+ 479              		.cfi_def_cfa_offset 24
+ 480              		.cfi_offset 7, -24
+ 481              		.cfi_offset 14, -20
+ 482 0004 82B0     		sub	sp, sp, #8
+ 483              	.LCFI33:
+ 484              		.cfi_def_cfa_offset 32
+ 485 0006 02AF     		add	r7, sp, #8
+ 486              	.LCFI34:
+ 487              		.cfi_def_cfa 7, 24
+ 488 0008 07F1080C 		add	ip, r7, #8
+ 489 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 122:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 123:Core/Src/tmp117.c ****       buf[0]=TMP117_TemperatureHighLimit;
+ 490              		.loc 1 123 13
+ 491 0010 154B     		ldr	r3, .L26
+ 492 0012 0222     		movs	r2, #2
+ 493 0014 1A70     		strb	r2, [r3]
+ 124:Core/Src/tmp117.c ****       
+ 125:Core/Src/tmp117.c ****       HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,1,100);
+ 494              		.loc 1 125 7
+ 495 0016 154B     		ldr	r3, .L26+4
+ 496 0018 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 497 001a 99B2     		uxth	r1, r3
+ 498 001c 6423     		movs	r3, #100
+ 499 001e 0093     		str	r3, [sp]
+ 500 0020 0123     		movs	r3, #1
+ 501 0022 114A     		ldr	r2, .L26
+ 502 0024 07F10800 		add	r0, r7, #8
+ 503 0028 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 126:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 504              		.loc 1 126 7
+ 505 002c 0120     		movs	r0, #1
+ 506 002e FFF7FEFF 		bl	HAL_Delay
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 12
+
+
+ 127:Core/Src/tmp117.c ****       HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100);
+ 507              		.loc 1 127 7
+ 508 0032 0E4B     		ldr	r3, .L26+4
+ 509 0034 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 510 0036 99B2     		uxth	r1, r3
+ 511 0038 6423     		movs	r3, #100
+ 512 003a 0093     		str	r3, [sp]
+ 513 003c 0223     		movs	r3, #2
+ 514 003e 0A4A     		ldr	r2, .L26
+ 515 0040 07F10800 		add	r0, r7, #8
+ 516 0044 FFF7FEFF 		bl	HAL_I2C_Master_Receive
+ 128:Core/Src/tmp117.c ****       return ((buf[0]<<8)|buf[1]);
+ 517              		.loc 1 128 19
+ 518 0048 074B     		ldr	r3, .L26
+ 519 004a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 520              		.loc 1 128 22
+ 521 004c 1B02     		lsls	r3, r3, #8
+ 522              		.loc 1 128 26
+ 523 004e 1AB2     		sxth	r2, r3
+ 524              		.loc 1 128 30
+ 525 0050 054B     		ldr	r3, .L26
+ 526 0052 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 527 0054 1BB2     		sxth	r3, r3
+ 528              		.loc 1 128 26
+ 529 0056 1343     		orrs	r3, r3, r2
+ 530 0058 1BB2     		sxth	r3, r3
+ 531 005a 9BB2     		uxth	r3, r3
+ 129:Core/Src/tmp117.c ****       
+ 130:Core/Src/tmp117.c **** }
+ 532              		.loc 1 130 1
+ 533 005c 1846     		mov	r0, r3
+ 534 005e BD46     		mov	sp, r7
+ 535              	.LCFI35:
+ 536              		.cfi_def_cfa_register 13
+ 537              		@ sp needed
+ 538 0060 BDE88040 		pop	{r7, lr}
+ 539              	.LCFI36:
+ 540              		.cfi_restore 14
+ 541              		.cfi_restore 7
+ 542              		.cfi_def_cfa_offset 16
+ 543 0064 04B0     		add	sp, sp, #16
+ 544              	.LCFI37:
+ 545              		.cfi_def_cfa_offset 0
+ 546 0066 7047     		bx	lr
+ 547              	.L27:
+ 548              		.align	2
+ 549              	.L26:
+ 550 0068 00000000 		.word	buf.13
+ 551 006c 00000000 		.word	TMP117_DeviceID
+ 552              		.cfi_endproc
+ 553              	.LFE69:
+ 555              		.section	.text.TMP117_set_LowLimit,"ax",%progbits
+ 556              		.align	1
+ 557              		.global	TMP117_set_LowLimit
+ 558              		.syntax unified
+ 559              		.thumb
+ 560              		.thumb_func
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 13
+
+
+ 561              		.fpu softvfp
+ 563              	TMP117_set_LowLimit:
+ 564              	.LFB70:
+ 131:Core/Src/tmp117.c **** 
+ 132:Core/Src/tmp117.c **** /*  
+ 133:Core/Src/tmp117.c ****    @Brief         Set LowLimit
+ 134:Core/Src/tmp117.c ****    @Description   Set LowLimit for Alert
+ 135:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 136:Core/Src/tmp117.c ****                   uint8_t first     ->  [15:8]
+ 137:Core/Src/tmp117.c ****                   uint8_t second    ->  [7:0]
+ 138:Core/Src/tmp117.c ****    @Return value  void
+ 139:Core/Src/tmp117.c ****  */
+ 140:Core/Src/tmp117.c **** HAL_StatusTypeDef TMP117_set_LowLimit                 (I2C_HandleTypeDef i2c,uint8_t first,uint8_t 
+ 141:Core/Src/tmp117.c **** {
+ 565              		.loc 1 141 1
+ 566              		.cfi_startproc
+ 567              		@ args = 92, pretend = 16, frame = 8
+ 568              		@ frame_needed = 1, uses_anonymous_args = 0
+ 569 0000 84B0     		sub	sp, sp, #16
+ 570              	.LCFI38:
+ 571              		.cfi_def_cfa_offset 16
+ 572 0002 80B5     		push	{r7, lr}
+ 573              	.LCFI39:
+ 574              		.cfi_def_cfa_offset 24
+ 575              		.cfi_offset 7, -24
+ 576              		.cfi_offset 14, -20
+ 577 0004 84B0     		sub	sp, sp, #16
+ 578              	.LCFI40:
+ 579              		.cfi_def_cfa_offset 40
+ 580 0006 02AF     		add	r7, sp, #8
+ 581              	.LCFI41:
+ 582              		.cfi_def_cfa 7, 32
+ 583 0008 07F1100C 		add	ip, r7, #16
+ 584 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 142:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 143:Core/Src/tmp117.c ****       HAL_StatusTypeDef ret;
+ 144:Core/Src/tmp117.c ****       buf[0]=TMP117_TemperatureLowLimit;
+ 585              		.loc 1 144 13
+ 586 0010 114B     		ldr	r3, .L30
+ 587 0012 0322     		movs	r2, #3
+ 588 0014 1A70     		strb	r2, [r3]
+ 145:Core/Src/tmp117.c ****       buf[1]=first;     //Reset Value
+ 589              		.loc 1 145 13
+ 590 0016 104A     		ldr	r2, .L30
+ 591 0018 97F86430 		ldrb	r3, [r7, #100]
+ 592 001c 5370     		strb	r3, [r2, #1]
+ 146:Core/Src/tmp117.c ****       buf[2]=second;    //Reset Value
+ 593              		.loc 1 146 13
+ 594 001e 0E4A     		ldr	r2, .L30
+ 595 0020 97F86830 		ldrb	r3, [r7, #104]
+ 596 0024 9370     		strb	r3, [r2, #2]
+ 147:Core/Src/tmp117.c **** 
+ 148:Core/Src/tmp117.c ****       ret = HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,3,100);
+ 597              		.loc 1 148 13
+ 598 0026 0D4B     		ldr	r3, .L30+4
+ 599 0028 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 600 002a 99B2     		uxth	r1, r3
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 14
+
+
+ 601 002c 6423     		movs	r3, #100
+ 602 002e 0093     		str	r3, [sp]
+ 603 0030 0323     		movs	r3, #3
+ 604 0032 094A     		ldr	r2, .L30
+ 605 0034 07F11000 		add	r0, r7, #16
+ 606 0038 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 607 003c 0346     		mov	r3, r0
+ 608 003e FB71     		strb	r3, [r7, #7]
+ 149:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 609              		.loc 1 149 7
+ 610 0040 0120     		movs	r0, #1
+ 611 0042 FFF7FEFF 		bl	HAL_Delay
+ 150:Core/Src/tmp117.c ****       return ret;
+ 612              		.loc 1 150 14
+ 613 0046 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 151:Core/Src/tmp117.c ****       
+ 152:Core/Src/tmp117.c **** }
+ 614              		.loc 1 152 1
+ 615 0048 1846     		mov	r0, r3
+ 616 004a 0837     		adds	r7, r7, #8
+ 617              	.LCFI42:
+ 618              		.cfi_def_cfa_offset 24
+ 619 004c BD46     		mov	sp, r7
+ 620              	.LCFI43:
+ 621              		.cfi_def_cfa_register 13
+ 622              		@ sp needed
+ 623 004e BDE88040 		pop	{r7, lr}
+ 624              	.LCFI44:
+ 625              		.cfi_restore 14
+ 626              		.cfi_restore 7
+ 627              		.cfi_def_cfa_offset 16
+ 628 0052 04B0     		add	sp, sp, #16
+ 629              	.LCFI45:
+ 630              		.cfi_def_cfa_offset 0
+ 631 0054 7047     		bx	lr
+ 632              	.L31:
+ 633 0056 00BF     		.align	2
+ 634              	.L30:
+ 635 0058 00000000 		.word	buf.12
+ 636 005c 00000000 		.word	TMP117_DeviceID
+ 637              		.cfi_endproc
+ 638              	.LFE70:
+ 640              		.section	.text.TMP117_get_LowLimit,"ax",%progbits
+ 641              		.align	1
+ 642              		.global	TMP117_get_LowLimit
+ 643              		.syntax unified
+ 644              		.thumb
+ 645              		.thumb_func
+ 646              		.fpu softvfp
+ 648              	TMP117_get_LowLimit:
+ 649              	.LFB71:
+ 153:Core/Src/tmp117.c **** 
+ 154:Core/Src/tmp117.c **** /*  
+ 155:Core/Src/tmp117.c ****    @Brief         Get LowLimit
+ 156:Core/Src/tmp117.c ****    @Description   Get Lowlimit Register Value
+ 157:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 158:Core/Src/tmp117.c ****    @Return value  uint16_t
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 15
+
+
+ 159:Core/Src/tmp117.c ****  */
+ 160:Core/Src/tmp117.c **** uint16_t TMP117_get_LowLimit          (I2C_HandleTypeDef i2c)
+ 161:Core/Src/tmp117.c **** {
+ 650              		.loc 1 161 1
+ 651              		.cfi_startproc
+ 652              		@ args = 84, pretend = 16, frame = 0
+ 653              		@ frame_needed = 1, uses_anonymous_args = 0
+ 654 0000 84B0     		sub	sp, sp, #16
+ 655              	.LCFI46:
+ 656              		.cfi_def_cfa_offset 16
+ 657 0002 80B5     		push	{r7, lr}
+ 658              	.LCFI47:
+ 659              		.cfi_def_cfa_offset 24
+ 660              		.cfi_offset 7, -24
+ 661              		.cfi_offset 14, -20
+ 662 0004 82B0     		sub	sp, sp, #8
+ 663              	.LCFI48:
+ 664              		.cfi_def_cfa_offset 32
+ 665 0006 02AF     		add	r7, sp, #8
+ 666              	.LCFI49:
+ 667              		.cfi_def_cfa 7, 24
+ 668 0008 07F1080C 		add	ip, r7, #8
+ 669 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 162:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 163:Core/Src/tmp117.c ****       buf[0]=TMP117_TemperatureLowLimit;
+ 670              		.loc 1 163 13
+ 671 0010 154B     		ldr	r3, .L34
+ 672 0012 0322     		movs	r2, #3
+ 673 0014 1A70     		strb	r2, [r3]
+ 164:Core/Src/tmp117.c ****       
+ 165:Core/Src/tmp117.c ****       HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,1,100);
+ 674              		.loc 1 165 7
+ 675 0016 154B     		ldr	r3, .L34+4
+ 676 0018 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 677 001a 99B2     		uxth	r1, r3
+ 678 001c 6423     		movs	r3, #100
+ 679 001e 0093     		str	r3, [sp]
+ 680 0020 0123     		movs	r3, #1
+ 681 0022 114A     		ldr	r2, .L34
+ 682 0024 07F10800 		add	r0, r7, #8
+ 683 0028 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 166:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 684              		.loc 1 166 7
+ 685 002c 0120     		movs	r0, #1
+ 686 002e FFF7FEFF 		bl	HAL_Delay
+ 167:Core/Src/tmp117.c ****       HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100);
+ 687              		.loc 1 167 7
+ 688 0032 0E4B     		ldr	r3, .L34+4
+ 689 0034 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 690 0036 99B2     		uxth	r1, r3
+ 691 0038 6423     		movs	r3, #100
+ 692 003a 0093     		str	r3, [sp]
+ 693 003c 0223     		movs	r3, #2
+ 694 003e 0A4A     		ldr	r2, .L34
+ 695 0040 07F10800 		add	r0, r7, #8
+ 696 0044 FFF7FEFF 		bl	HAL_I2C_Master_Receive
+ 168:Core/Src/tmp117.c ****       return ((buf[0]<<8)|buf[1]);
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 16
+
+
+ 697              		.loc 1 168 19
+ 698 0048 074B     		ldr	r3, .L34
+ 699 004a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 700              		.loc 1 168 22
+ 701 004c 1B02     		lsls	r3, r3, #8
+ 702              		.loc 1 168 26
+ 703 004e 1AB2     		sxth	r2, r3
+ 704              		.loc 1 168 30
+ 705 0050 054B     		ldr	r3, .L34
+ 706 0052 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 707 0054 1BB2     		sxth	r3, r3
+ 708              		.loc 1 168 26
+ 709 0056 1343     		orrs	r3, r3, r2
+ 710 0058 1BB2     		sxth	r3, r3
+ 711 005a 9BB2     		uxth	r3, r3
+ 169:Core/Src/tmp117.c ****       
+ 170:Core/Src/tmp117.c **** }
+ 712              		.loc 1 170 1
+ 713 005c 1846     		mov	r0, r3
+ 714 005e BD46     		mov	sp, r7
+ 715              	.LCFI50:
+ 716              		.cfi_def_cfa_register 13
+ 717              		@ sp needed
+ 718 0060 BDE88040 		pop	{r7, lr}
+ 719              	.LCFI51:
+ 720              		.cfi_restore 14
+ 721              		.cfi_restore 7
+ 722              		.cfi_def_cfa_offset 16
+ 723 0064 04B0     		add	sp, sp, #16
+ 724              	.LCFI52:
+ 725              		.cfi_def_cfa_offset 0
+ 726 0066 7047     		bx	lr
+ 727              	.L35:
+ 728              		.align	2
+ 729              	.L34:
+ 730 0068 00000000 		.word	buf.11
+ 731 006c 00000000 		.word	TMP117_DeviceID
+ 732              		.cfi_endproc
+ 733              	.LFE71:
+ 735              		.section	.text.TMP117_get_EEPROM_Unclock,"ax",%progbits
+ 736              		.align	1
+ 737              		.global	TMP117_get_EEPROM_Unclock
+ 738              		.syntax unified
+ 739              		.thumb
+ 740              		.thumb_func
+ 741              		.fpu softvfp
+ 743              	TMP117_get_EEPROM_Unclock:
+ 744              	.LFB72:
+ 171:Core/Src/tmp117.c **** 
+ 172:Core/Src/tmp117.c **** /*  
+ 173:Core/Src/tmp117.c ****    @Brief         Get EEPROM Unlock Register Value
+ 174:Core/Src/tmp117.c ****    @Description   Check EEPROM for Unlock/Lock
+ 175:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 176:Core/Src/tmp117.c ****    @Return value  uint16_t
+ 177:Core/Src/tmp117.c ****  */
+ 178:Core/Src/tmp117.c **** uint16_t TMP117_get_EEPROM_Unclock    (I2C_HandleTypeDef i2c)
+ 179:Core/Src/tmp117.c **** {
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 17
+
+
+ 745              		.loc 1 179 1
+ 746              		.cfi_startproc
+ 747              		@ args = 84, pretend = 16, frame = 0
+ 748              		@ frame_needed = 1, uses_anonymous_args = 0
+ 749 0000 84B0     		sub	sp, sp, #16
+ 750              	.LCFI53:
+ 751              		.cfi_def_cfa_offset 16
+ 752 0002 80B5     		push	{r7, lr}
+ 753              	.LCFI54:
+ 754              		.cfi_def_cfa_offset 24
+ 755              		.cfi_offset 7, -24
+ 756              		.cfi_offset 14, -20
+ 757 0004 82B0     		sub	sp, sp, #8
+ 758              	.LCFI55:
+ 759              		.cfi_def_cfa_offset 32
+ 760 0006 02AF     		add	r7, sp, #8
+ 761              	.LCFI56:
+ 762              		.cfi_def_cfa 7, 24
+ 763 0008 07F1080C 		add	ip, r7, #8
+ 764 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 180:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 181:Core/Src/tmp117.c ****       buf[0]=TMP117_EEPROM_Uclock;
+ 765              		.loc 1 181 13
+ 766 0010 154B     		ldr	r3, .L38
+ 767 0012 0422     		movs	r2, #4
+ 768 0014 1A70     		strb	r2, [r3]
+ 182:Core/Src/tmp117.c ****       
+ 183:Core/Src/tmp117.c ****       HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,1,100);
+ 769              		.loc 1 183 7
+ 770 0016 154B     		ldr	r3, .L38+4
+ 771 0018 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 772 001a 99B2     		uxth	r1, r3
+ 773 001c 6423     		movs	r3, #100
+ 774 001e 0093     		str	r3, [sp]
+ 775 0020 0123     		movs	r3, #1
+ 776 0022 114A     		ldr	r2, .L38
+ 777 0024 07F10800 		add	r0, r7, #8
+ 778 0028 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 184:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 779              		.loc 1 184 7
+ 780 002c 0120     		movs	r0, #1
+ 781 002e FFF7FEFF 		bl	HAL_Delay
+ 185:Core/Src/tmp117.c ****       HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100);
+ 782              		.loc 1 185 7
+ 783 0032 0E4B     		ldr	r3, .L38+4
+ 784 0034 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 785 0036 99B2     		uxth	r1, r3
+ 786 0038 6423     		movs	r3, #100
+ 787 003a 0093     		str	r3, [sp]
+ 788 003c 0223     		movs	r3, #2
+ 789 003e 0A4A     		ldr	r2, .L38
+ 790 0040 07F10800 		add	r0, r7, #8
+ 791 0044 FFF7FEFF 		bl	HAL_I2C_Master_Receive
+ 186:Core/Src/tmp117.c ****       return ((buf[0]<<8)|buf[1]);
+ 792              		.loc 1 186 19
+ 793 0048 074B     		ldr	r3, .L38
+ 794 004a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 18
+
+
+ 795              		.loc 1 186 22
+ 796 004c 1B02     		lsls	r3, r3, #8
+ 797              		.loc 1 186 26
+ 798 004e 1AB2     		sxth	r2, r3
+ 799              		.loc 1 186 30
+ 800 0050 054B     		ldr	r3, .L38
+ 801 0052 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 802 0054 1BB2     		sxth	r3, r3
+ 803              		.loc 1 186 26
+ 804 0056 1343     		orrs	r3, r3, r2
+ 805 0058 1BB2     		sxth	r3, r3
+ 806 005a 9BB2     		uxth	r3, r3
+ 187:Core/Src/tmp117.c ****       
+ 188:Core/Src/tmp117.c **** }
+ 807              		.loc 1 188 1
+ 808 005c 1846     		mov	r0, r3
+ 809 005e BD46     		mov	sp, r7
+ 810              	.LCFI57:
+ 811              		.cfi_def_cfa_register 13
+ 812              		@ sp needed
+ 813 0060 BDE88040 		pop	{r7, lr}
+ 814              	.LCFI58:
+ 815              		.cfi_restore 14
+ 816              		.cfi_restore 7
+ 817              		.cfi_def_cfa_offset 16
+ 818 0064 04B0     		add	sp, sp, #16
+ 819              	.LCFI59:
+ 820              		.cfi_def_cfa_offset 0
+ 821 0066 7047     		bx	lr
+ 822              	.L39:
+ 823              		.align	2
+ 824              	.L38:
+ 825 0068 00000000 		.word	buf.10
+ 826 006c 00000000 		.word	TMP117_DeviceID
+ 827              		.cfi_endproc
+ 828              	.LFE72:
+ 830              		.section	.text.TMP117_set_EEPROM_Unlock,"ax",%progbits
+ 831              		.align	1
+ 832              		.global	TMP117_set_EEPROM_Unlock
+ 833              		.syntax unified
+ 834              		.thumb
+ 835              		.thumb_func
+ 836              		.fpu softvfp
+ 838              	TMP117_set_EEPROM_Unlock:
+ 839              	.LFB73:
+ 189:Core/Src/tmp117.c **** 
+ 190:Core/Src/tmp117.c **** /*  
+ 191:Core/Src/tmp117.c ****    @Brief         Set EEPROM Unlock Register Value
+ 192:Core/Src/tmp117.c ****    @Description   Active/Inactive for EEPROM read/write situation
+ 193:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 194:Core/Src/tmp117.c ****                   uint8_t first     ->  [15:8]
+ 195:Core/Src/tmp117.c ****                   uint8_t second    ->  [7:0]
+ 196:Core/Src/tmp117.c ****    @Return value  void
+ 197:Core/Src/tmp117.c ****  */
+ 198:Core/Src/tmp117.c **** HAL_StatusTypeDef TMP117_set_EEPROM_Unlock            (I2C_HandleTypeDef i2c,uint8_t first,uint8_t 
+ 199:Core/Src/tmp117.c **** {
+ 840              		.loc 1 199 1
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 19
+
+
+ 841              		.cfi_startproc
+ 842              		@ args = 92, pretend = 16, frame = 8
+ 843              		@ frame_needed = 1, uses_anonymous_args = 0
+ 844 0000 84B0     		sub	sp, sp, #16
+ 845              	.LCFI60:
+ 846              		.cfi_def_cfa_offset 16
+ 847 0002 80B5     		push	{r7, lr}
+ 848              	.LCFI61:
+ 849              		.cfi_def_cfa_offset 24
+ 850              		.cfi_offset 7, -24
+ 851              		.cfi_offset 14, -20
+ 852 0004 84B0     		sub	sp, sp, #16
+ 853              	.LCFI62:
+ 854              		.cfi_def_cfa_offset 40
+ 855 0006 02AF     		add	r7, sp, #8
+ 856              	.LCFI63:
+ 857              		.cfi_def_cfa 7, 32
+ 858 0008 07F1100C 		add	ip, r7, #16
+ 859 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 200:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 201:Core/Src/tmp117.c ****       HAL_StatusTypeDef ret;
+ 202:Core/Src/tmp117.c ****       buf[0]=TMP117_EEPROM_Uclock;
+ 860              		.loc 1 202 13
+ 861 0010 114B     		ldr	r3, .L42
+ 862 0012 0422     		movs	r2, #4
+ 863 0014 1A70     		strb	r2, [r3]
+ 203:Core/Src/tmp117.c ****       buf[1]=first;     
+ 864              		.loc 1 203 13
+ 865 0016 104A     		ldr	r2, .L42
+ 866 0018 97F86430 		ldrb	r3, [r7, #100]
+ 867 001c 5370     		strb	r3, [r2, #1]
+ 204:Core/Src/tmp117.c ****       buf[2]=second;    
+ 868              		.loc 1 204 13
+ 869 001e 0E4A     		ldr	r2, .L42
+ 870 0020 97F86830 		ldrb	r3, [r7, #104]
+ 871 0024 9370     		strb	r3, [r2, #2]
+ 205:Core/Src/tmp117.c **** 
+ 206:Core/Src/tmp117.c ****       ret = HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,3,100);
+ 872              		.loc 1 206 13
+ 873 0026 0D4B     		ldr	r3, .L42+4
+ 874 0028 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 875 002a 99B2     		uxth	r1, r3
+ 876 002c 6423     		movs	r3, #100
+ 877 002e 0093     		str	r3, [sp]
+ 878 0030 0323     		movs	r3, #3
+ 879 0032 094A     		ldr	r2, .L42
+ 880 0034 07F11000 		add	r0, r7, #16
+ 881 0038 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 882 003c 0346     		mov	r3, r0
+ 883 003e FB71     		strb	r3, [r7, #7]
+ 207:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 884              		.loc 1 207 7
+ 885 0040 0120     		movs	r0, #1
+ 886 0042 FFF7FEFF 		bl	HAL_Delay
+ 208:Core/Src/tmp117.c ****       return ret;
+ 887              		.loc 1 208 14
+ 888 0046 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 20
+
+
+ 209:Core/Src/tmp117.c ****       
+ 210:Core/Src/tmp117.c **** }
+ 889              		.loc 1 210 1
+ 890 0048 1846     		mov	r0, r3
+ 891 004a 0837     		adds	r7, r7, #8
+ 892              	.LCFI64:
+ 893              		.cfi_def_cfa_offset 24
+ 894 004c BD46     		mov	sp, r7
+ 895              	.LCFI65:
+ 896              		.cfi_def_cfa_register 13
+ 897              		@ sp needed
+ 898 004e BDE88040 		pop	{r7, lr}
+ 899              	.LCFI66:
+ 900              		.cfi_restore 14
+ 901              		.cfi_restore 7
+ 902              		.cfi_def_cfa_offset 16
+ 903 0052 04B0     		add	sp, sp, #16
+ 904              	.LCFI67:
+ 905              		.cfi_def_cfa_offset 0
+ 906 0054 7047     		bx	lr
+ 907              	.L43:
+ 908 0056 00BF     		.align	2
+ 909              	.L42:
+ 910 0058 00000000 		.word	buf.9
+ 911 005c 00000000 		.word	TMP117_DeviceID
+ 912              		.cfi_endproc
+ 913              	.LFE73:
+ 915              		.section	.text.TMP117_set_EEPROM1,"ax",%progbits
+ 916              		.align	1
+ 917              		.global	TMP117_set_EEPROM1
+ 918              		.syntax unified
+ 919              		.thumb
+ 920              		.thumb_func
+ 921              		.fpu softvfp
+ 923              	TMP117_set_EEPROM1:
+ 924              	.LFB74:
+ 211:Core/Src/tmp117.c **** 
+ 212:Core/Src/tmp117.c **** /*  
+ 213:Core/Src/tmp117.c ****    @Brief         
+ 214:Core/Src/tmp117.c ****    @Description   
+ 215:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 216:Core/Src/tmp117.c ****                   uint8_t first     ->  [15:8]
+ 217:Core/Src/tmp117.c ****                   uint8_t second    ->  [7:0]
+ 218:Core/Src/tmp117.c ****    @Return value  void
+ 219:Core/Src/tmp117.c ****  */
+ 220:Core/Src/tmp117.c **** HAL_StatusTypeDef TMP117_set_EEPROM1                  (I2C_HandleTypeDef i2c,uint8_t first,uint8_t 
+ 221:Core/Src/tmp117.c **** {
+ 925              		.loc 1 221 1
+ 926              		.cfi_startproc
+ 927              		@ args = 92, pretend = 16, frame = 8
+ 928              		@ frame_needed = 1, uses_anonymous_args = 0
+ 929 0000 84B0     		sub	sp, sp, #16
+ 930              	.LCFI68:
+ 931              		.cfi_def_cfa_offset 16
+ 932 0002 80B5     		push	{r7, lr}
+ 933              	.LCFI69:
+ 934              		.cfi_def_cfa_offset 24
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 21
+
+
+ 935              		.cfi_offset 7, -24
+ 936              		.cfi_offset 14, -20
+ 937 0004 84B0     		sub	sp, sp, #16
+ 938              	.LCFI70:
+ 939              		.cfi_def_cfa_offset 40
+ 940 0006 02AF     		add	r7, sp, #8
+ 941              	.LCFI71:
+ 942              		.cfi_def_cfa 7, 32
+ 943 0008 07F1100C 		add	ip, r7, #16
+ 944 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 222:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 223:Core/Src/tmp117.c ****       HAL_StatusTypeDef ret;
+ 224:Core/Src/tmp117.c ****       buf[0]=TMP117_EEPROM1;
+ 945              		.loc 1 224 13
+ 946 0010 114B     		ldr	r3, .L46
+ 947 0012 0522     		movs	r2, #5
+ 948 0014 1A70     		strb	r2, [r3]
+ 225:Core/Src/tmp117.c ****       buf[1]=first;     //Reset Value
+ 949              		.loc 1 225 13
+ 950 0016 104A     		ldr	r2, .L46
+ 951 0018 97F86430 		ldrb	r3, [r7, #100]
+ 952 001c 5370     		strb	r3, [r2, #1]
+ 226:Core/Src/tmp117.c ****       buf[2]=second;    //Reset Value
+ 953              		.loc 1 226 13
+ 954 001e 0E4A     		ldr	r2, .L46
+ 955 0020 97F86830 		ldrb	r3, [r7, #104]
+ 956 0024 9370     		strb	r3, [r2, #2]
+ 227:Core/Src/tmp117.c **** 
+ 228:Core/Src/tmp117.c ****       ret = HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,3,100);
+ 957              		.loc 1 228 13
+ 958 0026 0D4B     		ldr	r3, .L46+4
+ 959 0028 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 960 002a 99B2     		uxth	r1, r3
+ 961 002c 6423     		movs	r3, #100
+ 962 002e 0093     		str	r3, [sp]
+ 963 0030 0323     		movs	r3, #3
+ 964 0032 094A     		ldr	r2, .L46
+ 965 0034 07F11000 		add	r0, r7, #16
+ 966 0038 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 967 003c 0346     		mov	r3, r0
+ 968 003e FB71     		strb	r3, [r7, #7]
+ 229:Core/Src/tmp117.c ****       HAL_Delay(1); 
+ 969              		.loc 1 229 7
+ 970 0040 0120     		movs	r0, #1
+ 971 0042 FFF7FEFF 		bl	HAL_Delay
+ 230:Core/Src/tmp117.c ****       return ret;
+ 972              		.loc 1 230 14
+ 973 0046 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 231:Core/Src/tmp117.c **** }
+ 974              		.loc 1 231 1
+ 975 0048 1846     		mov	r0, r3
+ 976 004a 0837     		adds	r7, r7, #8
+ 977              	.LCFI72:
+ 978              		.cfi_def_cfa_offset 24
+ 979 004c BD46     		mov	sp, r7
+ 980              	.LCFI73:
+ 981              		.cfi_def_cfa_register 13
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 22
+
+
+ 982              		@ sp needed
+ 983 004e BDE88040 		pop	{r7, lr}
+ 984              	.LCFI74:
+ 985              		.cfi_restore 14
+ 986              		.cfi_restore 7
+ 987              		.cfi_def_cfa_offset 16
+ 988 0052 04B0     		add	sp, sp, #16
+ 989              	.LCFI75:
+ 990              		.cfi_def_cfa_offset 0
+ 991 0054 7047     		bx	lr
+ 992              	.L47:
+ 993 0056 00BF     		.align	2
+ 994              	.L46:
+ 995 0058 00000000 		.word	buf.8
+ 996 005c 00000000 		.word	TMP117_DeviceID
+ 997              		.cfi_endproc
+ 998              	.LFE74:
+ 1000              		.section	.text.TMP117_get_EEPROM1,"ax",%progbits
+ 1001              		.align	1
+ 1002              		.global	TMP117_get_EEPROM1
+ 1003              		.syntax unified
+ 1004              		.thumb
+ 1005              		.thumb_func
+ 1006              		.fpu softvfp
+ 1008              	TMP117_get_EEPROM1:
+ 1009              	.LFB75:
+ 232:Core/Src/tmp117.c **** 
+ 233:Core/Src/tmp117.c **** /*  
+ 234:Core/Src/tmp117.c ****    @Brief         
+ 235:Core/Src/tmp117.c ****    @Description   
+ 236:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 237:Core/Src/tmp117.c ****    @Return value  uint16_t
+ 238:Core/Src/tmp117.c ****  */
+ 239:Core/Src/tmp117.c **** uint16_t TMP117_get_EEPROM1           (I2C_HandleTypeDef i2c)
+ 240:Core/Src/tmp117.c **** {
+ 1010              		.loc 1 240 1
+ 1011              		.cfi_startproc
+ 1012              		@ args = 84, pretend = 16, frame = 0
+ 1013              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1014 0000 84B0     		sub	sp, sp, #16
+ 1015              	.LCFI76:
+ 1016              		.cfi_def_cfa_offset 16
+ 1017 0002 80B5     		push	{r7, lr}
+ 1018              	.LCFI77:
+ 1019              		.cfi_def_cfa_offset 24
+ 1020              		.cfi_offset 7, -24
+ 1021              		.cfi_offset 14, -20
+ 1022 0004 82B0     		sub	sp, sp, #8
+ 1023              	.LCFI78:
+ 1024              		.cfi_def_cfa_offset 32
+ 1025 0006 02AF     		add	r7, sp, #8
+ 1026              	.LCFI79:
+ 1027              		.cfi_def_cfa 7, 24
+ 1028 0008 07F1080C 		add	ip, r7, #8
+ 1029 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 241:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 242:Core/Src/tmp117.c ****       buf[0]=TMP117_EEPROM1;
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 23
+
+
+ 1030              		.loc 1 242 13
+ 1031 0010 154B     		ldr	r3, .L50
+ 1032 0012 0522     		movs	r2, #5
+ 1033 0014 1A70     		strb	r2, [r3]
+ 243:Core/Src/tmp117.c ****       
+ 244:Core/Src/tmp117.c ****       HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,1,100);
+ 1034              		.loc 1 244 7
+ 1035 0016 154B     		ldr	r3, .L50+4
+ 1036 0018 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1037 001a 99B2     		uxth	r1, r3
+ 1038 001c 6423     		movs	r3, #100
+ 1039 001e 0093     		str	r3, [sp]
+ 1040 0020 0123     		movs	r3, #1
+ 1041 0022 114A     		ldr	r2, .L50
+ 1042 0024 07F10800 		add	r0, r7, #8
+ 1043 0028 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 245:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 1044              		.loc 1 245 7
+ 1045 002c 0120     		movs	r0, #1
+ 1046 002e FFF7FEFF 		bl	HAL_Delay
+ 246:Core/Src/tmp117.c ****       HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100);
+ 1047              		.loc 1 246 7
+ 1048 0032 0E4B     		ldr	r3, .L50+4
+ 1049 0034 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1050 0036 99B2     		uxth	r1, r3
+ 1051 0038 6423     		movs	r3, #100
+ 1052 003a 0093     		str	r3, [sp]
+ 1053 003c 0223     		movs	r3, #2
+ 1054 003e 0A4A     		ldr	r2, .L50
+ 1055 0040 07F10800 		add	r0, r7, #8
+ 1056 0044 FFF7FEFF 		bl	HAL_I2C_Master_Receive
+ 247:Core/Src/tmp117.c ****       return ((buf[0]<<8)|buf[1]);
+ 1057              		.loc 1 247 19
+ 1058 0048 074B     		ldr	r3, .L50
+ 1059 004a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1060              		.loc 1 247 22
+ 1061 004c 1B02     		lsls	r3, r3, #8
+ 1062              		.loc 1 247 26
+ 1063 004e 1AB2     		sxth	r2, r3
+ 1064              		.loc 1 247 30
+ 1065 0050 054B     		ldr	r3, .L50
+ 1066 0052 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 1067 0054 1BB2     		sxth	r3, r3
+ 1068              		.loc 1 247 26
+ 1069 0056 1343     		orrs	r3, r3, r2
+ 1070 0058 1BB2     		sxth	r3, r3
+ 1071 005a 9BB2     		uxth	r3, r3
+ 248:Core/Src/tmp117.c ****       
+ 249:Core/Src/tmp117.c **** }
+ 1072              		.loc 1 249 1
+ 1073 005c 1846     		mov	r0, r3
+ 1074 005e BD46     		mov	sp, r7
+ 1075              	.LCFI80:
+ 1076              		.cfi_def_cfa_register 13
+ 1077              		@ sp needed
+ 1078 0060 BDE88040 		pop	{r7, lr}
+ 1079              	.LCFI81:
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 24
+
+
+ 1080              		.cfi_restore 14
+ 1081              		.cfi_restore 7
+ 1082              		.cfi_def_cfa_offset 16
+ 1083 0064 04B0     		add	sp, sp, #16
+ 1084              	.LCFI82:
+ 1085              		.cfi_def_cfa_offset 0
+ 1086 0066 7047     		bx	lr
+ 1087              	.L51:
+ 1088              		.align	2
+ 1089              	.L50:
+ 1090 0068 00000000 		.word	buf.7
+ 1091 006c 00000000 		.word	TMP117_DeviceID
+ 1092              		.cfi_endproc
+ 1093              	.LFE75:
+ 1095              		.section	.text.TMP117_set_EEPROM2,"ax",%progbits
+ 1096              		.align	1
+ 1097              		.global	TMP117_set_EEPROM2
+ 1098              		.syntax unified
+ 1099              		.thumb
+ 1100              		.thumb_func
+ 1101              		.fpu softvfp
+ 1103              	TMP117_set_EEPROM2:
+ 1104              	.LFB76:
+ 250:Core/Src/tmp117.c **** 
+ 251:Core/Src/tmp117.c **** /*  
+ 252:Core/Src/tmp117.c ****    @Brief         
+ 253:Core/Src/tmp117.c ****    @Description   
+ 254:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 255:Core/Src/tmp117.c ****                   uint8_t first     ->  [15:8]
+ 256:Core/Src/tmp117.c ****                   uint8_t second    ->  [7:0]
+ 257:Core/Src/tmp117.c ****    @Return value  void
+ 258:Core/Src/tmp117.c ****  */
+ 259:Core/Src/tmp117.c **** HAL_StatusTypeDef TMP117_set_EEPROM2                  (I2C_HandleTypeDef i2c,uint8_t first,uint8_t 
+ 260:Core/Src/tmp117.c **** {
+ 1105              		.loc 1 260 1
+ 1106              		.cfi_startproc
+ 1107              		@ args = 92, pretend = 16, frame = 8
+ 1108              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1109 0000 84B0     		sub	sp, sp, #16
+ 1110              	.LCFI83:
+ 1111              		.cfi_def_cfa_offset 16
+ 1112 0002 80B5     		push	{r7, lr}
+ 1113              	.LCFI84:
+ 1114              		.cfi_def_cfa_offset 24
+ 1115              		.cfi_offset 7, -24
+ 1116              		.cfi_offset 14, -20
+ 1117 0004 84B0     		sub	sp, sp, #16
+ 1118              	.LCFI85:
+ 1119              		.cfi_def_cfa_offset 40
+ 1120 0006 02AF     		add	r7, sp, #8
+ 1121              	.LCFI86:
+ 1122              		.cfi_def_cfa 7, 32
+ 1123 0008 07F1100C 		add	ip, r7, #16
+ 1124 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 261:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 262:Core/Src/tmp117.c ****       HAL_StatusTypeDef ret;
+ 263:Core/Src/tmp117.c ****       buf[0]=TMP117_EEPROM2;
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 25
+
+
+ 1125              		.loc 1 263 13
+ 1126 0010 114B     		ldr	r3, .L54
+ 1127 0012 0622     		movs	r2, #6
+ 1128 0014 1A70     		strb	r2, [r3]
+ 264:Core/Src/tmp117.c ****       buf[1]=first;     
+ 1129              		.loc 1 264 13
+ 1130 0016 104A     		ldr	r2, .L54
+ 1131 0018 97F86430 		ldrb	r3, [r7, #100]
+ 1132 001c 5370     		strb	r3, [r2, #1]
+ 265:Core/Src/tmp117.c ****       buf[2]=second;    
+ 1133              		.loc 1 265 13
+ 1134 001e 0E4A     		ldr	r2, .L54
+ 1135 0020 97F86830 		ldrb	r3, [r7, #104]
+ 1136 0024 9370     		strb	r3, [r2, #2]
+ 266:Core/Src/tmp117.c **** 
+ 267:Core/Src/tmp117.c ****       ret = HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,3,100);
+ 1137              		.loc 1 267 13
+ 1138 0026 0D4B     		ldr	r3, .L54+4
+ 1139 0028 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1140 002a 99B2     		uxth	r1, r3
+ 1141 002c 6423     		movs	r3, #100
+ 1142 002e 0093     		str	r3, [sp]
+ 1143 0030 0323     		movs	r3, #3
+ 1144 0032 094A     		ldr	r2, .L54
+ 1145 0034 07F11000 		add	r0, r7, #16
+ 1146 0038 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 1147 003c 0346     		mov	r3, r0
+ 1148 003e FB71     		strb	r3, [r7, #7]
+ 268:Core/Src/tmp117.c ****       HAL_Delay(1);     
+ 1149              		.loc 1 268 7
+ 1150 0040 0120     		movs	r0, #1
+ 1151 0042 FFF7FEFF 		bl	HAL_Delay
+ 269:Core/Src/tmp117.c ****       return ret;
+ 1152              		.loc 1 269 14
+ 1153 0046 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 270:Core/Src/tmp117.c **** }
+ 1154              		.loc 1 270 1
+ 1155 0048 1846     		mov	r0, r3
+ 1156 004a 0837     		adds	r7, r7, #8
+ 1157              	.LCFI87:
+ 1158              		.cfi_def_cfa_offset 24
+ 1159 004c BD46     		mov	sp, r7
+ 1160              	.LCFI88:
+ 1161              		.cfi_def_cfa_register 13
+ 1162              		@ sp needed
+ 1163 004e BDE88040 		pop	{r7, lr}
+ 1164              	.LCFI89:
+ 1165              		.cfi_restore 14
+ 1166              		.cfi_restore 7
+ 1167              		.cfi_def_cfa_offset 16
+ 1168 0052 04B0     		add	sp, sp, #16
+ 1169              	.LCFI90:
+ 1170              		.cfi_def_cfa_offset 0
+ 1171 0054 7047     		bx	lr
+ 1172              	.L55:
+ 1173 0056 00BF     		.align	2
+ 1174              	.L54:
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 26
+
+
+ 1175 0058 00000000 		.word	buf.6
+ 1176 005c 00000000 		.word	TMP117_DeviceID
+ 1177              		.cfi_endproc
+ 1178              	.LFE76:
+ 1180              		.section	.text.TMP117_get_EEPROM2,"ax",%progbits
+ 1181              		.align	1
+ 1182              		.global	TMP117_get_EEPROM2
+ 1183              		.syntax unified
+ 1184              		.thumb
+ 1185              		.thumb_func
+ 1186              		.fpu softvfp
+ 1188              	TMP117_get_EEPROM2:
+ 1189              	.LFB77:
+ 271:Core/Src/tmp117.c **** 
+ 272:Core/Src/tmp117.c **** /*  
+ 273:Core/Src/tmp117.c ****    @Brief         
+ 274:Core/Src/tmp117.c ****    @Description   
+ 275:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 276:Core/Src/tmp117.c ****    @Return value  uint16_t
+ 277:Core/Src/tmp117.c ****  */
+ 278:Core/Src/tmp117.c **** uint16_t TMP117_get_EEPROM2           (I2C_HandleTypeDef i2c)
+ 279:Core/Src/tmp117.c **** {
+ 1190              		.loc 1 279 1
+ 1191              		.cfi_startproc
+ 1192              		@ args = 84, pretend = 16, frame = 0
+ 1193              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1194 0000 84B0     		sub	sp, sp, #16
+ 1195              	.LCFI91:
+ 1196              		.cfi_def_cfa_offset 16
+ 1197 0002 80B5     		push	{r7, lr}
+ 1198              	.LCFI92:
+ 1199              		.cfi_def_cfa_offset 24
+ 1200              		.cfi_offset 7, -24
+ 1201              		.cfi_offset 14, -20
+ 1202 0004 82B0     		sub	sp, sp, #8
+ 1203              	.LCFI93:
+ 1204              		.cfi_def_cfa_offset 32
+ 1205 0006 02AF     		add	r7, sp, #8
+ 1206              	.LCFI94:
+ 1207              		.cfi_def_cfa 7, 24
+ 1208 0008 07F1080C 		add	ip, r7, #8
+ 1209 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 280:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 281:Core/Src/tmp117.c ****       buf[0]=TMP117_EEPROM2;
+ 1210              		.loc 1 281 13
+ 1211 0010 154B     		ldr	r3, .L58
+ 1212 0012 0622     		movs	r2, #6
+ 1213 0014 1A70     		strb	r2, [r3]
+ 282:Core/Src/tmp117.c ****       
+ 283:Core/Src/tmp117.c ****       HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,1,100);
+ 1214              		.loc 1 283 7
+ 1215 0016 154B     		ldr	r3, .L58+4
+ 1216 0018 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1217 001a 99B2     		uxth	r1, r3
+ 1218 001c 6423     		movs	r3, #100
+ 1219 001e 0093     		str	r3, [sp]
+ 1220 0020 0123     		movs	r3, #1
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 27
+
+
+ 1221 0022 114A     		ldr	r2, .L58
+ 1222 0024 07F10800 		add	r0, r7, #8
+ 1223 0028 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 284:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 1224              		.loc 1 284 7
+ 1225 002c 0120     		movs	r0, #1
+ 1226 002e FFF7FEFF 		bl	HAL_Delay
+ 285:Core/Src/tmp117.c ****       HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100);
+ 1227              		.loc 1 285 7
+ 1228 0032 0E4B     		ldr	r3, .L58+4
+ 1229 0034 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1230 0036 99B2     		uxth	r1, r3
+ 1231 0038 6423     		movs	r3, #100
+ 1232 003a 0093     		str	r3, [sp]
+ 1233 003c 0223     		movs	r3, #2
+ 1234 003e 0A4A     		ldr	r2, .L58
+ 1235 0040 07F10800 		add	r0, r7, #8
+ 1236 0044 FFF7FEFF 		bl	HAL_I2C_Master_Receive
+ 286:Core/Src/tmp117.c ****       return ((buf[0]<<8)|buf[1]);
+ 1237              		.loc 1 286 19
+ 1238 0048 074B     		ldr	r3, .L58
+ 1239 004a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1240              		.loc 1 286 22
+ 1241 004c 1B02     		lsls	r3, r3, #8
+ 1242              		.loc 1 286 26
+ 1243 004e 1AB2     		sxth	r2, r3
+ 1244              		.loc 1 286 30
+ 1245 0050 054B     		ldr	r3, .L58
+ 1246 0052 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 1247 0054 1BB2     		sxth	r3, r3
+ 1248              		.loc 1 286 26
+ 1249 0056 1343     		orrs	r3, r3, r2
+ 1250 0058 1BB2     		sxth	r3, r3
+ 1251 005a 9BB2     		uxth	r3, r3
+ 287:Core/Src/tmp117.c **** }
+ 1252              		.loc 1 287 1
+ 1253 005c 1846     		mov	r0, r3
+ 1254 005e BD46     		mov	sp, r7
+ 1255              	.LCFI95:
+ 1256              		.cfi_def_cfa_register 13
+ 1257              		@ sp needed
+ 1258 0060 BDE88040 		pop	{r7, lr}
+ 1259              	.LCFI96:
+ 1260              		.cfi_restore 14
+ 1261              		.cfi_restore 7
+ 1262              		.cfi_def_cfa_offset 16
+ 1263 0064 04B0     		add	sp, sp, #16
+ 1264              	.LCFI97:
+ 1265              		.cfi_def_cfa_offset 0
+ 1266 0066 7047     		bx	lr
+ 1267              	.L59:
+ 1268              		.align	2
+ 1269              	.L58:
+ 1270 0068 00000000 		.word	buf.5
+ 1271 006c 00000000 		.word	TMP117_DeviceID
+ 1272              		.cfi_endproc
+ 1273              	.LFE77:
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 28
+
+
+ 1275              		.section	.text.TMP117_set_EEPROM3,"ax",%progbits
+ 1276              		.align	1
+ 1277              		.global	TMP117_set_EEPROM3
+ 1278              		.syntax unified
+ 1279              		.thumb
+ 1280              		.thumb_func
+ 1281              		.fpu softvfp
+ 1283              	TMP117_set_EEPROM3:
+ 1284              	.LFB78:
+ 288:Core/Src/tmp117.c **** 
+ 289:Core/Src/tmp117.c **** /*  
+ 290:Core/Src/tmp117.c ****    @Brief         
+ 291:Core/Src/tmp117.c ****    @Description   
+ 292:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 293:Core/Src/tmp117.c ****                   uint8_t first     ->  [15:8]
+ 294:Core/Src/tmp117.c ****                   uint8_t second    ->  [7:0]
+ 295:Core/Src/tmp117.c ****    @Return value  void
+ 296:Core/Src/tmp117.c ****  */
+ 297:Core/Src/tmp117.c **** HAL_StatusTypeDef TMP117_set_EEPROM3                  (I2C_HandleTypeDef i2c,uint8_t first,uint8_t 
+ 298:Core/Src/tmp117.c **** {
+ 1285              		.loc 1 298 1
+ 1286              		.cfi_startproc
+ 1287              		@ args = 92, pretend = 16, frame = 8
+ 1288              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1289 0000 84B0     		sub	sp, sp, #16
+ 1290              	.LCFI98:
+ 1291              		.cfi_def_cfa_offset 16
+ 1292 0002 80B5     		push	{r7, lr}
+ 1293              	.LCFI99:
+ 1294              		.cfi_def_cfa_offset 24
+ 1295              		.cfi_offset 7, -24
+ 1296              		.cfi_offset 14, -20
+ 1297 0004 84B0     		sub	sp, sp, #16
+ 1298              	.LCFI100:
+ 1299              		.cfi_def_cfa_offset 40
+ 1300 0006 02AF     		add	r7, sp, #8
+ 1301              	.LCFI101:
+ 1302              		.cfi_def_cfa 7, 32
+ 1303 0008 07F1100C 		add	ip, r7, #16
+ 1304 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 299:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 300:Core/Src/tmp117.c ****       HAL_StatusTypeDef ret;
+ 301:Core/Src/tmp117.c ****       buf[0]=TMP117_EEPROM3;
+ 1305              		.loc 1 301 13
+ 1306 0010 114B     		ldr	r3, .L62
+ 1307 0012 0822     		movs	r2, #8
+ 1308 0014 1A70     		strb	r2, [r3]
+ 302:Core/Src/tmp117.c ****       buf[1]=first;     
+ 1309              		.loc 1 302 13
+ 1310 0016 104A     		ldr	r2, .L62
+ 1311 0018 97F86430 		ldrb	r3, [r7, #100]
+ 1312 001c 5370     		strb	r3, [r2, #1]
+ 303:Core/Src/tmp117.c ****       buf[2]=second;    
+ 1313              		.loc 1 303 13
+ 1314 001e 0E4A     		ldr	r2, .L62
+ 1315 0020 97F86830 		ldrb	r3, [r7, #104]
+ 1316 0024 9370     		strb	r3, [r2, #2]
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 29
+
+
+ 304:Core/Src/tmp117.c **** 
+ 305:Core/Src/tmp117.c ****       ret = HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,3,100);
+ 1317              		.loc 1 305 13
+ 1318 0026 0D4B     		ldr	r3, .L62+4
+ 1319 0028 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1320 002a 99B2     		uxth	r1, r3
+ 1321 002c 6423     		movs	r3, #100
+ 1322 002e 0093     		str	r3, [sp]
+ 1323 0030 0323     		movs	r3, #3
+ 1324 0032 094A     		ldr	r2, .L62
+ 1325 0034 07F11000 		add	r0, r7, #16
+ 1326 0038 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 1327 003c 0346     		mov	r3, r0
+ 1328 003e FB71     		strb	r3, [r7, #7]
+ 306:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 1329              		.loc 1 306 7
+ 1330 0040 0120     		movs	r0, #1
+ 1331 0042 FFF7FEFF 		bl	HAL_Delay
+ 307:Core/Src/tmp117.c ****       return ret;
+ 1332              		.loc 1 307 14
+ 1333 0046 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 308:Core/Src/tmp117.c **** }
+ 1334              		.loc 1 308 1
+ 1335 0048 1846     		mov	r0, r3
+ 1336 004a 0837     		adds	r7, r7, #8
+ 1337              	.LCFI102:
+ 1338              		.cfi_def_cfa_offset 24
+ 1339 004c BD46     		mov	sp, r7
+ 1340              	.LCFI103:
+ 1341              		.cfi_def_cfa_register 13
+ 1342              		@ sp needed
+ 1343 004e BDE88040 		pop	{r7, lr}
+ 1344              	.LCFI104:
+ 1345              		.cfi_restore 14
+ 1346              		.cfi_restore 7
+ 1347              		.cfi_def_cfa_offset 16
+ 1348 0052 04B0     		add	sp, sp, #16
+ 1349              	.LCFI105:
+ 1350              		.cfi_def_cfa_offset 0
+ 1351 0054 7047     		bx	lr
+ 1352              	.L63:
+ 1353 0056 00BF     		.align	2
+ 1354              	.L62:
+ 1355 0058 00000000 		.word	buf.4
+ 1356 005c 00000000 		.word	TMP117_DeviceID
+ 1357              		.cfi_endproc
+ 1358              	.LFE78:
+ 1360              		.section	.text.TMP117_get_EEPROM3,"ax",%progbits
+ 1361              		.align	1
+ 1362              		.global	TMP117_get_EEPROM3
+ 1363              		.syntax unified
+ 1364              		.thumb
+ 1365              		.thumb_func
+ 1366              		.fpu softvfp
+ 1368              	TMP117_get_EEPROM3:
+ 1369              	.LFB79:
+ 309:Core/Src/tmp117.c **** 
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 30
+
+
+ 310:Core/Src/tmp117.c **** /*  
+ 311:Core/Src/tmp117.c ****    @Brief         Get EEPROM3 Value
+ 312:Core/Src/tmp117.c ****    @Description   
+ 313:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 314:Core/Src/tmp117.c ****    @Return value  uint16_t
+ 315:Core/Src/tmp117.c ****  */
+ 316:Core/Src/tmp117.c **** uint16_t TMP117_get_EEPROM3           (I2C_HandleTypeDef i2c)
+ 317:Core/Src/tmp117.c **** {
+ 1370              		.loc 1 317 1
+ 1371              		.cfi_startproc
+ 1372              		@ args = 84, pretend = 16, frame = 0
+ 1373              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1374 0000 84B0     		sub	sp, sp, #16
+ 1375              	.LCFI106:
+ 1376              		.cfi_def_cfa_offset 16
+ 1377 0002 80B5     		push	{r7, lr}
+ 1378              	.LCFI107:
+ 1379              		.cfi_def_cfa_offset 24
+ 1380              		.cfi_offset 7, -24
+ 1381              		.cfi_offset 14, -20
+ 1382 0004 82B0     		sub	sp, sp, #8
+ 1383              	.LCFI108:
+ 1384              		.cfi_def_cfa_offset 32
+ 1385 0006 02AF     		add	r7, sp, #8
+ 1386              	.LCFI109:
+ 1387              		.cfi_def_cfa 7, 24
+ 1388 0008 07F1080C 		add	ip, r7, #8
+ 1389 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 318:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 319:Core/Src/tmp117.c ****       buf[0]=TMP117_EEPROM3;
+ 1390              		.loc 1 319 13
+ 1391 0010 154B     		ldr	r3, .L66
+ 1392 0012 0822     		movs	r2, #8
+ 1393 0014 1A70     		strb	r2, [r3]
+ 320:Core/Src/tmp117.c ****       
+ 321:Core/Src/tmp117.c ****       HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,1,100);
+ 1394              		.loc 1 321 7
+ 1395 0016 154B     		ldr	r3, .L66+4
+ 1396 0018 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1397 001a 99B2     		uxth	r1, r3
+ 1398 001c 6423     		movs	r3, #100
+ 1399 001e 0093     		str	r3, [sp]
+ 1400 0020 0123     		movs	r3, #1
+ 1401 0022 114A     		ldr	r2, .L66
+ 1402 0024 07F10800 		add	r0, r7, #8
+ 1403 0028 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 322:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 1404              		.loc 1 322 7
+ 1405 002c 0120     		movs	r0, #1
+ 1406 002e FFF7FEFF 		bl	HAL_Delay
+ 323:Core/Src/tmp117.c ****       HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100);
+ 1407              		.loc 1 323 7
+ 1408 0032 0E4B     		ldr	r3, .L66+4
+ 1409 0034 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1410 0036 99B2     		uxth	r1, r3
+ 1411 0038 6423     		movs	r3, #100
+ 1412 003a 0093     		str	r3, [sp]
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 31
+
+
+ 1413 003c 0223     		movs	r3, #2
+ 1414 003e 0A4A     		ldr	r2, .L66
+ 1415 0040 07F10800 		add	r0, r7, #8
+ 1416 0044 FFF7FEFF 		bl	HAL_I2C_Master_Receive
+ 324:Core/Src/tmp117.c ****       return ((buf[0]<<8)|buf[1]);
+ 1417              		.loc 1 324 19
+ 1418 0048 074B     		ldr	r3, .L66
+ 1419 004a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1420              		.loc 1 324 22
+ 1421 004c 1B02     		lsls	r3, r3, #8
+ 1422              		.loc 1 324 26
+ 1423 004e 1AB2     		sxth	r2, r3
+ 1424              		.loc 1 324 30
+ 1425 0050 054B     		ldr	r3, .L66
+ 1426 0052 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 1427 0054 1BB2     		sxth	r3, r3
+ 1428              		.loc 1 324 26
+ 1429 0056 1343     		orrs	r3, r3, r2
+ 1430 0058 1BB2     		sxth	r3, r3
+ 1431 005a 9BB2     		uxth	r3, r3
+ 325:Core/Src/tmp117.c ****       
+ 326:Core/Src/tmp117.c **** }
+ 1432              		.loc 1 326 1
+ 1433 005c 1846     		mov	r0, r3
+ 1434 005e BD46     		mov	sp, r7
+ 1435              	.LCFI110:
+ 1436              		.cfi_def_cfa_register 13
+ 1437              		@ sp needed
+ 1438 0060 BDE88040 		pop	{r7, lr}
+ 1439              	.LCFI111:
+ 1440              		.cfi_restore 14
+ 1441              		.cfi_restore 7
+ 1442              		.cfi_def_cfa_offset 16
+ 1443 0064 04B0     		add	sp, sp, #16
+ 1444              	.LCFI112:
+ 1445              		.cfi_def_cfa_offset 0
+ 1446 0066 7047     		bx	lr
+ 1447              	.L67:
+ 1448              		.align	2
+ 1449              	.L66:
+ 1450 0068 00000000 		.word	buf.3
+ 1451 006c 00000000 		.word	TMP117_DeviceID
+ 1452              		.cfi_endproc
+ 1453              	.LFE79:
+ 1455              		.section	.text.TMP117_set_Temperature_Offset,"ax",%progbits
+ 1456              		.align	1
+ 1457              		.global	TMP117_set_Temperature_Offset
+ 1458              		.syntax unified
+ 1459              		.thumb
+ 1460              		.thumb_func
+ 1461              		.fpu softvfp
+ 1463              	TMP117_set_Temperature_Offset:
+ 1464              	.LFB80:
+ 327:Core/Src/tmp117.c **** 
+ 328:Core/Src/tmp117.c **** /*  
+ 329:Core/Src/tmp117.c ****    @Brief         Set Temperature Offset Value 
+ 330:Core/Src/tmp117.c ****    @Description   Set Temperature Offset Value for Calibrating
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 32
+
+
+ 331:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 332:Core/Src/tmp117.c ****                   uint8_t first     ->  [15:8]
+ 333:Core/Src/tmp117.c ****                   uint8_t second    ->  [7:0]
+ 334:Core/Src/tmp117.c ****    @Return value  void
+ 335:Core/Src/tmp117.c ****  */
+ 336:Core/Src/tmp117.c **** HAL_StatusTypeDef TMP117_set_Temperature_Offset       (I2C_HandleTypeDef i2c,uint8_t first,uint8_t 
+ 337:Core/Src/tmp117.c **** {
+ 1465              		.loc 1 337 1
+ 1466              		.cfi_startproc
+ 1467              		@ args = 92, pretend = 16, frame = 8
+ 1468              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1469 0000 84B0     		sub	sp, sp, #16
+ 1470              	.LCFI113:
+ 1471              		.cfi_def_cfa_offset 16
+ 1472 0002 80B5     		push	{r7, lr}
+ 1473              	.LCFI114:
+ 1474              		.cfi_def_cfa_offset 24
+ 1475              		.cfi_offset 7, -24
+ 1476              		.cfi_offset 14, -20
+ 1477 0004 84B0     		sub	sp, sp, #16
+ 1478              	.LCFI115:
+ 1479              		.cfi_def_cfa_offset 40
+ 1480 0006 02AF     		add	r7, sp, #8
+ 1481              	.LCFI116:
+ 1482              		.cfi_def_cfa 7, 32
+ 1483 0008 07F1100C 		add	ip, r7, #16
+ 1484 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 338:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 339:Core/Src/tmp117.c ****       HAL_StatusTypeDef ret;
+ 340:Core/Src/tmp117.c ****       buf[0]=TMP117_Temperature_Offset;
+ 1485              		.loc 1 340 13
+ 1486 0010 114B     		ldr	r3, .L70
+ 1487 0012 0722     		movs	r2, #7
+ 1488 0014 1A70     		strb	r2, [r3]
+ 341:Core/Src/tmp117.c ****       buf[1]=first;     
+ 1489              		.loc 1 341 13
+ 1490 0016 104A     		ldr	r2, .L70
+ 1491 0018 97F86430 		ldrb	r3, [r7, #100]
+ 1492 001c 5370     		strb	r3, [r2, #1]
+ 342:Core/Src/tmp117.c ****       buf[2]=second;    
+ 1493              		.loc 1 342 13
+ 1494 001e 0E4A     		ldr	r2, .L70
+ 1495 0020 97F86830 		ldrb	r3, [r7, #104]
+ 1496 0024 9370     		strb	r3, [r2, #2]
+ 343:Core/Src/tmp117.c **** 
+ 344:Core/Src/tmp117.c ****       ret = HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,3,100);
+ 1497              		.loc 1 344 13
+ 1498 0026 0D4B     		ldr	r3, .L70+4
+ 1499 0028 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1500 002a 99B2     		uxth	r1, r3
+ 1501 002c 6423     		movs	r3, #100
+ 1502 002e 0093     		str	r3, [sp]
+ 1503 0030 0323     		movs	r3, #3
+ 1504 0032 094A     		ldr	r2, .L70
+ 1505 0034 07F11000 		add	r0, r7, #16
+ 1506 0038 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 1507 003c 0346     		mov	r3, r0
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 33
+
+
+ 1508 003e FB71     		strb	r3, [r7, #7]
+ 345:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 1509              		.loc 1 345 7
+ 1510 0040 0120     		movs	r0, #1
+ 1511 0042 FFF7FEFF 		bl	HAL_Delay
+ 346:Core/Src/tmp117.c ****       return ret;
+ 1512              		.loc 1 346 14
+ 1513 0046 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 347:Core/Src/tmp117.c ****       
+ 348:Core/Src/tmp117.c **** }
+ 1514              		.loc 1 348 1
+ 1515 0048 1846     		mov	r0, r3
+ 1516 004a 0837     		adds	r7, r7, #8
+ 1517              	.LCFI117:
+ 1518              		.cfi_def_cfa_offset 24
+ 1519 004c BD46     		mov	sp, r7
+ 1520              	.LCFI118:
+ 1521              		.cfi_def_cfa_register 13
+ 1522              		@ sp needed
+ 1523 004e BDE88040 		pop	{r7, lr}
+ 1524              	.LCFI119:
+ 1525              		.cfi_restore 14
+ 1526              		.cfi_restore 7
+ 1527              		.cfi_def_cfa_offset 16
+ 1528 0052 04B0     		add	sp, sp, #16
+ 1529              	.LCFI120:
+ 1530              		.cfi_def_cfa_offset 0
+ 1531 0054 7047     		bx	lr
+ 1532              	.L71:
+ 1533 0056 00BF     		.align	2
+ 1534              	.L70:
+ 1535 0058 00000000 		.word	buf.2
+ 1536 005c 00000000 		.word	TMP117_DeviceID
+ 1537              		.cfi_endproc
+ 1538              	.LFE80:
+ 1540              		.section	.text.TMP117_get_Temperature_Offset,"ax",%progbits
+ 1541              		.align	1
+ 1542              		.global	TMP117_get_Temperature_Offset
+ 1543              		.syntax unified
+ 1544              		.thumb
+ 1545              		.thumb_func
+ 1546              		.fpu softvfp
+ 1548              	TMP117_get_Temperature_Offset:
+ 1549              	.LFB81:
+ 349:Core/Src/tmp117.c **** 
+ 350:Core/Src/tmp117.c **** /*  
+ 351:Core/Src/tmp117.c ****    @Brief         Get Temperature Offset Value
+ 352:Core/Src/tmp117.c ****    @Description   Get Temperature Offset Value for Calibrating
+ 353:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 354:Core/Src/tmp117.c ****    @Return value  uint16_t
+ 355:Core/Src/tmp117.c ****  */
+ 356:Core/Src/tmp117.c **** uint16_t TMP117_get_Temperature_Offset(I2C_HandleTypeDef i2c)
+ 357:Core/Src/tmp117.c **** {
+ 1550              		.loc 1 357 1
+ 1551              		.cfi_startproc
+ 1552              		@ args = 84, pretend = 16, frame = 0
+ 1553              		@ frame_needed = 1, uses_anonymous_args = 0
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 34
+
+
+ 1554 0000 84B0     		sub	sp, sp, #16
+ 1555              	.LCFI121:
+ 1556              		.cfi_def_cfa_offset 16
+ 1557 0002 80B5     		push	{r7, lr}
+ 1558              	.LCFI122:
+ 1559              		.cfi_def_cfa_offset 24
+ 1560              		.cfi_offset 7, -24
+ 1561              		.cfi_offset 14, -20
+ 1562 0004 82B0     		sub	sp, sp, #8
+ 1563              	.LCFI123:
+ 1564              		.cfi_def_cfa_offset 32
+ 1565 0006 02AF     		add	r7, sp, #8
+ 1566              	.LCFI124:
+ 1567              		.cfi_def_cfa 7, 24
+ 1568 0008 07F1080C 		add	ip, r7, #8
+ 1569 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 358:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 359:Core/Src/tmp117.c ****       buf[0]=TMP117_Temperature_Offset;
+ 1570              		.loc 1 359 13
+ 1571 0010 154B     		ldr	r3, .L74
+ 1572 0012 0722     		movs	r2, #7
+ 1573 0014 1A70     		strb	r2, [r3]
+ 360:Core/Src/tmp117.c ****       
+ 361:Core/Src/tmp117.c ****       HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,1,100);
+ 1574              		.loc 1 361 7
+ 1575 0016 154B     		ldr	r3, .L74+4
+ 1576 0018 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1577 001a 99B2     		uxth	r1, r3
+ 1578 001c 6423     		movs	r3, #100
+ 1579 001e 0093     		str	r3, [sp]
+ 1580 0020 0123     		movs	r3, #1
+ 1581 0022 114A     		ldr	r2, .L74
+ 1582 0024 07F10800 		add	r0, r7, #8
+ 1583 0028 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 362:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 1584              		.loc 1 362 7
+ 1585 002c 0120     		movs	r0, #1
+ 1586 002e FFF7FEFF 		bl	HAL_Delay
+ 363:Core/Src/tmp117.c ****       HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100);
+ 1587              		.loc 1 363 7
+ 1588 0032 0E4B     		ldr	r3, .L74+4
+ 1589 0034 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1590 0036 99B2     		uxth	r1, r3
+ 1591 0038 6423     		movs	r3, #100
+ 1592 003a 0093     		str	r3, [sp]
+ 1593 003c 0223     		movs	r3, #2
+ 1594 003e 0A4A     		ldr	r2, .L74
+ 1595 0040 07F10800 		add	r0, r7, #8
+ 1596 0044 FFF7FEFF 		bl	HAL_I2C_Master_Receive
+ 364:Core/Src/tmp117.c ****       return ((buf[0]<<8)|buf[1]);
+ 1597              		.loc 1 364 19
+ 1598 0048 074B     		ldr	r3, .L74
+ 1599 004a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1600              		.loc 1 364 22
+ 1601 004c 1B02     		lsls	r3, r3, #8
+ 1602              		.loc 1 364 26
+ 1603 004e 1AB2     		sxth	r2, r3
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 35
+
+
+ 1604              		.loc 1 364 30
+ 1605 0050 054B     		ldr	r3, .L74
+ 1606 0052 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 1607 0054 1BB2     		sxth	r3, r3
+ 1608              		.loc 1 364 26
+ 1609 0056 1343     		orrs	r3, r3, r2
+ 1610 0058 1BB2     		sxth	r3, r3
+ 1611 005a 9BB2     		uxth	r3, r3
+ 365:Core/Src/tmp117.c ****       
+ 366:Core/Src/tmp117.c **** }
+ 1612              		.loc 1 366 1
+ 1613 005c 1846     		mov	r0, r3
+ 1614 005e BD46     		mov	sp, r7
+ 1615              	.LCFI125:
+ 1616              		.cfi_def_cfa_register 13
+ 1617              		@ sp needed
+ 1618 0060 BDE88040 		pop	{r7, lr}
+ 1619              	.LCFI126:
+ 1620              		.cfi_restore 14
+ 1621              		.cfi_restore 7
+ 1622              		.cfi_def_cfa_offset 16
+ 1623 0064 04B0     		add	sp, sp, #16
+ 1624              	.LCFI127:
+ 1625              		.cfi_def_cfa_offset 0
+ 1626 0066 7047     		bx	lr
+ 1627              	.L75:
+ 1628              		.align	2
+ 1629              	.L74:
+ 1630 0068 00000000 		.word	buf.1
+ 1631 006c 00000000 		.word	TMP117_DeviceID
+ 1632              		.cfi_endproc
+ 1633              	.LFE81:
+ 1635              		.section	.text.TMP117_get_ID_Register,"ax",%progbits
+ 1636              		.align	1
+ 1637              		.global	TMP117_get_ID_Register
+ 1638              		.syntax unified
+ 1639              		.thumb
+ 1640              		.thumb_func
+ 1641              		.fpu softvfp
+ 1643              	TMP117_get_ID_Register:
+ 1644              	.LFB82:
+ 367:Core/Src/tmp117.c **** 
+ 368:Core/Src/tmp117.c **** /*  
+ 369:Core/Src/tmp117.c ****    @Brief         Get ID Register
+ 370:Core/Src/tmp117.c ****    @Description   Check Device ID for Error Handler
+ 371:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 372:Core/Src/tmp117.c ****    @Return value  uint16_t
+ 373:Core/Src/tmp117.c ****  */
+ 374:Core/Src/tmp117.c **** uint16_t TMP117_get_ID_Register       (I2C_HandleTypeDef i2c)
+ 375:Core/Src/tmp117.c **** {
+ 1645              		.loc 1 375 1
+ 1646              		.cfi_startproc
+ 1647              		@ args = 84, pretend = 16, frame = 0
+ 1648              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1649 0000 84B0     		sub	sp, sp, #16
+ 1650              	.LCFI128:
+ 1651              		.cfi_def_cfa_offset 16
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 36
+
+
+ 1652 0002 80B5     		push	{r7, lr}
+ 1653              	.LCFI129:
+ 1654              		.cfi_def_cfa_offset 24
+ 1655              		.cfi_offset 7, -24
+ 1656              		.cfi_offset 14, -20
+ 1657 0004 82B0     		sub	sp, sp, #8
+ 1658              	.LCFI130:
+ 1659              		.cfi_def_cfa_offset 32
+ 1660 0006 02AF     		add	r7, sp, #8
+ 1661              	.LCFI131:
+ 1662              		.cfi_def_cfa 7, 24
+ 1663 0008 07F1080C 		add	ip, r7, #8
+ 1664 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 376:Core/Src/tmp117.c ****       static uint8_t buf[3];
+ 377:Core/Src/tmp117.c ****       buf[0]=TMP117_ID_Register;
+ 1665              		.loc 1 377 13
+ 1666 0010 154B     		ldr	r3, .L78
+ 1667 0012 0F22     		movs	r2, #15
+ 1668 0014 1A70     		strb	r2, [r3]
+ 378:Core/Src/tmp117.c ****       
+ 379:Core/Src/tmp117.c ****       HAL_I2C_Master_Transmit(&i2c,TMP117_DeviceID,buf,1,100);
+ 1669              		.loc 1 379 7
+ 1670 0016 154B     		ldr	r3, .L78+4
+ 1671 0018 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1672 001a 99B2     		uxth	r1, r3
+ 1673 001c 6423     		movs	r3, #100
+ 1674 001e 0093     		str	r3, [sp]
+ 1675 0020 0123     		movs	r3, #1
+ 1676 0022 114A     		ldr	r2, .L78
+ 1677 0024 07F10800 		add	r0, r7, #8
+ 1678 0028 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 380:Core/Src/tmp117.c ****       HAL_Delay(1);
+ 1679              		.loc 1 380 7
+ 1680 002c 0120     		movs	r0, #1
+ 1681 002e FFF7FEFF 		bl	HAL_Delay
+ 381:Core/Src/tmp117.c ****       HAL_I2C_Master_Receive(&i2c,TMP117_DeviceID,buf,2,100);
+ 1682              		.loc 1 381 7
+ 1683 0032 0E4B     		ldr	r3, .L78+4
+ 1684 0034 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1685 0036 99B2     		uxth	r1, r3
+ 1686 0038 6423     		movs	r3, #100
+ 1687 003a 0093     		str	r3, [sp]
+ 1688 003c 0223     		movs	r3, #2
+ 1689 003e 0A4A     		ldr	r2, .L78
+ 1690 0040 07F10800 		add	r0, r7, #8
+ 1691 0044 FFF7FEFF 		bl	HAL_I2C_Master_Receive
+ 382:Core/Src/tmp117.c ****       return ((buf[0]<<8)|buf[1]);
+ 1692              		.loc 1 382 19
+ 1693 0048 074B     		ldr	r3, .L78
+ 1694 004a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1695              		.loc 1 382 22
+ 1696 004c 1B02     		lsls	r3, r3, #8
+ 1697              		.loc 1 382 26
+ 1698 004e 1AB2     		sxth	r2, r3
+ 1699              		.loc 1 382 30
+ 1700 0050 054B     		ldr	r3, .L78
+ 1701 0052 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 37
+
+
+ 1702 0054 1BB2     		sxth	r3, r3
+ 1703              		.loc 1 382 26
+ 1704 0056 1343     		orrs	r3, r3, r2
+ 1705 0058 1BB2     		sxth	r3, r3
+ 1706 005a 9BB2     		uxth	r3, r3
+ 383:Core/Src/tmp117.c ****       
+ 384:Core/Src/tmp117.c **** }
+ 1707              		.loc 1 384 1
+ 1708 005c 1846     		mov	r0, r3
+ 1709 005e BD46     		mov	sp, r7
+ 1710              	.LCFI132:
+ 1711              		.cfi_def_cfa_register 13
+ 1712              		@ sp needed
+ 1713 0060 BDE88040 		pop	{r7, lr}
+ 1714              	.LCFI133:
+ 1715              		.cfi_restore 14
+ 1716              		.cfi_restore 7
+ 1717              		.cfi_def_cfa_offset 16
+ 1718 0064 04B0     		add	sp, sp, #16
+ 1719              	.LCFI134:
+ 1720              		.cfi_def_cfa_offset 0
+ 1721 0066 7047     		bx	lr
+ 1722              	.L79:
+ 1723              		.align	2
+ 1724              	.L78:
+ 1725 0068 00000000 		.word	buf.0
+ 1726 006c 00000000 		.word	TMP117_DeviceID
+ 1727              		.cfi_endproc
+ 1728              	.LFE82:
+ 1730              		.section	.text.TMP117_Initialization,"ax",%progbits
+ 1731              		.align	1
+ 1732              		.global	TMP117_Initialization
+ 1733              		.syntax unified
+ 1734              		.thumb
+ 1735              		.thumb_func
+ 1736              		.fpu softvfp
+ 1738              	TMP117_Initialization:
+ 1739              	.LFB83:
+ 385:Core/Src/tmp117.c **** 
+ 386:Core/Src/tmp117.c **** /*  
+ 387:Core/Src/tmp117.c ****    @Brief         Custom Initialization
+ 388:Core/Src/tmp117.c ****    @Description   Custom Parameters for Sensor
+ 389:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 390:Core/Src/tmp117.c ****    @Return value  void
+ 391:Core/Src/tmp117.c ****  */
+ 392:Core/Src/tmp117.c **** void TMP117_Initialization               (I2C_HandleTypeDef i2c)
+ 393:Core/Src/tmp117.c **** {
+ 1740              		.loc 1 393 1
+ 1741              		.cfi_startproc
+ 1742              		@ args = 84, pretend = 16, frame = 0
+ 1743              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1744 0000 84B0     		sub	sp, sp, #16
+ 1745              	.LCFI135:
+ 1746              		.cfi_def_cfa_offset 16
+ 1747 0002 80B5     		push	{r7, lr}
+ 1748              	.LCFI136:
+ 1749              		.cfi_def_cfa_offset 24
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 38
+
+
+ 1750              		.cfi_offset 7, -24
+ 1751              		.cfi_offset 14, -20
+ 1752 0004 94B0     		sub	sp, sp, #80
+ 1753              	.LCFI137:
+ 1754              		.cfi_def_cfa_offset 104
+ 1755 0006 14AF     		add	r7, sp, #80
+ 1756              	.LCFI138:
+ 1757              		.cfi_def_cfa 7, 24
+ 1758 0008 07F1080C 		add	ip, r7, #8
+ 1759 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 394:Core/Src/tmp117.c ****       TMP117_set_Configuration(i2c,0x00,0x02);
+ 1760              		.loc 1 394 7
+ 1761 0010 0223     		movs	r3, #2
+ 1762 0012 1293     		str	r3, [sp, #72]
+ 1763 0014 0023     		movs	r3, #0
+ 1764 0016 1193     		str	r3, [sp, #68]
+ 1765 0018 6846     		mov	r0, sp
+ 1766 001a 07F11803 		add	r3, r7, #24
+ 1767 001e 4422     		movs	r2, #68
+ 1768 0020 1946     		mov	r1, r3
+ 1769 0022 FFF7FEFF 		bl	memcpy
+ 1770 0026 07F10803 		add	r3, r7, #8
+ 1771 002a 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 1772 002c FFF7FEFF 		bl	TMP117_set_Configuration
+ 395:Core/Src/tmp117.c ****       HAL_Delay(3);
+ 1773              		.loc 1 395 7
+ 1774 0030 0320     		movs	r0, #3
+ 1775 0032 FFF7FEFF 		bl	HAL_Delay
+ 396:Core/Src/tmp117.c ****       TMP117_set_Configuration(i2c,0x02,0x20);
+ 1776              		.loc 1 396 7
+ 1777 0036 2023     		movs	r3, #32
+ 1778 0038 1293     		str	r3, [sp, #72]
+ 1779 003a 0223     		movs	r3, #2
+ 1780 003c 1193     		str	r3, [sp, #68]
+ 1781 003e 6846     		mov	r0, sp
+ 1782 0040 07F11803 		add	r3, r7, #24
+ 1783 0044 4422     		movs	r2, #68
+ 1784 0046 1946     		mov	r1, r3
+ 1785 0048 FFF7FEFF 		bl	memcpy
+ 1786 004c 07F10803 		add	r3, r7, #8
+ 1787 0050 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 1788 0052 FFF7FEFF 		bl	TMP117_set_Configuration
+ 397:Core/Src/tmp117.c ****       TMP117_set_Temperature_Offset(i2c,0x00,0x00); //Default Value
+ 1789              		.loc 1 397 7
+ 1790 0056 0023     		movs	r3, #0
+ 1791 0058 1293     		str	r3, [sp, #72]
+ 1792 005a 0023     		movs	r3, #0
+ 1793 005c 1193     		str	r3, [sp, #68]
+ 1794 005e 6846     		mov	r0, sp
+ 1795 0060 07F11803 		add	r3, r7, #24
+ 1796 0064 4422     		movs	r2, #68
+ 1797 0066 1946     		mov	r1, r3
+ 1798 0068 FFF7FEFF 		bl	memcpy
+ 1799 006c 07F10803 		add	r3, r7, #8
+ 1800 0070 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 1801 0072 FFF7FEFF 		bl	TMP117_set_Temperature_Offset
+ 398:Core/Src/tmp117.c ****       TMP117_set_LowLimit(i2c,0x12,0x80);           //Set 10 Celcius
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 39
+
+
+ 1802              		.loc 1 398 7
+ 1803 0076 8023     		movs	r3, #128
+ 1804 0078 1293     		str	r3, [sp, #72]
+ 1805 007a 1223     		movs	r3, #18
+ 1806 007c 1193     		str	r3, [sp, #68]
+ 1807 007e 6846     		mov	r0, sp
+ 1808 0080 07F11803 		add	r3, r7, #24
+ 1809 0084 4422     		movs	r2, #68
+ 1810 0086 1946     		mov	r1, r3
+ 1811 0088 FFF7FEFF 		bl	memcpy
+ 1812 008c 07F10803 		add	r3, r7, #8
+ 1813 0090 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 1814 0092 FFF7FEFF 		bl	TMP117_set_LowLimit
+ 399:Core/Src/tmp117.c ****       TMP117_set_HighLimit(i2c,0x51,0x20);          //Set 40 Celcius
+ 1815              		.loc 1 399 7
+ 1816 0096 2023     		movs	r3, #32
+ 1817 0098 1293     		str	r3, [sp, #72]
+ 1818 009a 5123     		movs	r3, #81
+ 1819 009c 1193     		str	r3, [sp, #68]
+ 1820 009e 6846     		mov	r0, sp
+ 1821 00a0 07F11803 		add	r3, r7, #24
+ 1822 00a4 4422     		movs	r2, #68
+ 1823 00a6 1946     		mov	r1, r3
+ 1824 00a8 FFF7FEFF 		bl	memcpy
+ 1825 00ac 07F10803 		add	r3, r7, #8
+ 1826 00b0 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 1827 00b2 FFF7FEFF 		bl	TMP117_set_HighLimit
+ 400:Core/Src/tmp117.c **** }
+ 1828              		.loc 1 400 1
+ 1829 00b6 00BF     		nop
+ 1830 00b8 BD46     		mov	sp, r7
+ 1831              	.LCFI139:
+ 1832              		.cfi_def_cfa_register 13
+ 1833              		@ sp needed
+ 1834 00ba BDE88040 		pop	{r7, lr}
+ 1835              	.LCFI140:
+ 1836              		.cfi_restore 14
+ 1837              		.cfi_restore 7
+ 1838              		.cfi_def_cfa_offset 16
+ 1839 00be 04B0     		add	sp, sp, #16
+ 1840              	.LCFI141:
+ 1841              		.cfi_def_cfa_offset 0
+ 1842 00c0 7047     		bx	lr
+ 1843              		.cfi_endproc
+ 1844              	.LFE83:
+ 1846              		.section	.text.TMP117_Initialization_DEFAULT,"ax",%progbits
+ 1847              		.align	1
+ 1848              		.global	TMP117_Initialization_DEFAULT
+ 1849              		.syntax unified
+ 1850              		.thumb
+ 1851              		.thumb_func
+ 1852              		.fpu softvfp
+ 1854              	TMP117_Initialization_DEFAULT:
+ 1855              	.LFB84:
+ 401:Core/Src/tmp117.c **** 
+ 402:Core/Src/tmp117.c **** /*  
+ 403:Core/Src/tmp117.c ****    @Brief         Default Initialization
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 40
+
+
+ 404:Core/Src/tmp117.c ****    @Description   Default Parameters for Sensor
+ 405:Core/Src/tmp117.c ****    @Parameter     I2C_HandleTypeDef ->  HAL_I2C Handle
+ 406:Core/Src/tmp117.c ****    @Return value  void
+ 407:Core/Src/tmp117.c ****  */
+ 408:Core/Src/tmp117.c **** void TMP117_Initialization_DEFAULT       (I2C_HandleTypeDef i2c)
+ 409:Core/Src/tmp117.c **** {
+ 1856              		.loc 1 409 1
+ 1857              		.cfi_startproc
+ 1858              		@ args = 84, pretend = 16, frame = 0
+ 1859              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1860 0000 84B0     		sub	sp, sp, #16
+ 1861              	.LCFI142:
+ 1862              		.cfi_def_cfa_offset 16
+ 1863 0002 80B5     		push	{r7, lr}
+ 1864              	.LCFI143:
+ 1865              		.cfi_def_cfa_offset 24
+ 1866              		.cfi_offset 7, -24
+ 1867              		.cfi_offset 14, -20
+ 1868 0004 94B0     		sub	sp, sp, #80
+ 1869              	.LCFI144:
+ 1870              		.cfi_def_cfa_offset 104
+ 1871 0006 14AF     		add	r7, sp, #80
+ 1872              	.LCFI145:
+ 1873              		.cfi_def_cfa 7, 24
+ 1874 0008 07F1080C 		add	ip, r7, #8
+ 1875 000c 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+ 410:Core/Src/tmp117.c ****       HAL_StatusTypeDef ret;
+ 411:Core/Src/tmp117.c **** 
+ 412:Core/Src/tmp117.c ****       //reset
+ 413:Core/Src/tmp117.c **** 
+ 414:Core/Src/tmp117.c ****       while (TMP117_set_Configuration(i2c, 0x02, 0x22) != HAL_OK)
+ 1876              		.loc 1 414 13
+ 1877 0010 02E0     		b	.L82
+ 1878              	.L83:
+ 415:Core/Src/tmp117.c ****       {
+ 416:Core/Src/tmp117.c ****             HAL_Delay(1);
+ 1879              		.loc 1 416 13
+ 1880 0012 0120     		movs	r0, #1
+ 1881 0014 FFF7FEFF 		bl	HAL_Delay
+ 1882              	.L82:
+ 414:Core/Src/tmp117.c ****       {
+ 1883              		.loc 1 414 14
+ 1884 0018 2223     		movs	r3, #34
+ 1885 001a 1293     		str	r3, [sp, #72]
+ 1886 001c 0223     		movs	r3, #2
+ 1887 001e 1193     		str	r3, [sp, #68]
+ 1888 0020 6846     		mov	r0, sp
+ 1889 0022 07F11803 		add	r3, r7, #24
+ 1890 0026 4422     		movs	r2, #68
+ 1891 0028 1946     		mov	r1, r3
+ 1892 002a FFF7FEFF 		bl	memcpy
+ 1893 002e 07F10803 		add	r3, r7, #8
+ 1894 0032 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 1895 0034 FFF7FEFF 		bl	TMP117_set_Configuration
+ 1896 0038 0346     		mov	r3, r0
+ 414:Core/Src/tmp117.c ****       {
+ 1897              		.loc 1 414 13
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 41
+
+
+ 1898 003a 002B     		cmp	r3, #0
+ 1899 003c E9D1     		bne	.L83
+ 417:Core/Src/tmp117.c ****       }
+ 418:Core/Src/tmp117.c ****       //while (TMP117_set_Configuration(i2c, 0x02, 0x20) != HAL_OK)
+ 419:Core/Src/tmp117.c ****       while (TMP117_set_Configuration(i2c, 0x00, 0x10) != HAL_OK)
+ 1900              		.loc 1 419 13
+ 1901 003e 02E0     		b	.L84
+ 1902              	.L85:
+ 420:Core/Src/tmp117.c ****       {
+ 421:Core/Src/tmp117.c ****             HAL_Delay(1);
+ 1903              		.loc 1 421 13
+ 1904 0040 0120     		movs	r0, #1
+ 1905 0042 FFF7FEFF 		bl	HAL_Delay
+ 1906              	.L84:
+ 419:Core/Src/tmp117.c ****       {
+ 1907              		.loc 1 419 14
+ 1908 0046 1023     		movs	r3, #16
+ 1909 0048 1293     		str	r3, [sp, #72]
+ 1910 004a 0023     		movs	r3, #0
+ 1911 004c 1193     		str	r3, [sp, #68]
+ 1912 004e 6846     		mov	r0, sp
+ 1913 0050 07F11803 		add	r3, r7, #24
+ 1914 0054 4422     		movs	r2, #68
+ 1915 0056 1946     		mov	r1, r3
+ 1916 0058 FFF7FEFF 		bl	memcpy
+ 1917 005c 07F10803 		add	r3, r7, #8
+ 1918 0060 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 1919 0062 FFF7FEFF 		bl	TMP117_set_Configuration
+ 1920 0066 0346     		mov	r3, r0
+ 419:Core/Src/tmp117.c ****       {
+ 1921              		.loc 1 419 13
+ 1922 0068 002B     		cmp	r3, #0
+ 1923 006a E9D1     		bne	.L85
+ 422:Core/Src/tmp117.c ****       }
+ 423:Core/Src/tmp117.c ****       while (TMP117_set_Temperature_Offset(i2c, 0x00, 0x00) != HAL_OK)
+ 1924              		.loc 1 423 13
+ 1925 006c 02E0     		b	.L86
+ 1926              	.L87:
+ 424:Core/Src/tmp117.c ****       {
+ 425:Core/Src/tmp117.c ****             HAL_Delay(1);
+ 1927              		.loc 1 425 13
+ 1928 006e 0120     		movs	r0, #1
+ 1929 0070 FFF7FEFF 		bl	HAL_Delay
+ 1930              	.L86:
+ 423:Core/Src/tmp117.c ****       {
+ 1931              		.loc 1 423 14
+ 1932 0074 0023     		movs	r3, #0
+ 1933 0076 1293     		str	r3, [sp, #72]
+ 1934 0078 0023     		movs	r3, #0
+ 1935 007a 1193     		str	r3, [sp, #68]
+ 1936 007c 6846     		mov	r0, sp
+ 1937 007e 07F11803 		add	r3, r7, #24
+ 1938 0082 4422     		movs	r2, #68
+ 1939 0084 1946     		mov	r1, r3
+ 1940 0086 FFF7FEFF 		bl	memcpy
+ 1941 008a 07F10803 		add	r3, r7, #8
+ 1942 008e 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 42
+
+
+ 1943 0090 FFF7FEFF 		bl	TMP117_set_Temperature_Offset
+ 1944 0094 0346     		mov	r3, r0
+ 423:Core/Src/tmp117.c ****       {
+ 1945              		.loc 1 423 13
+ 1946 0096 002B     		cmp	r3, #0
+ 1947 0098 E9D1     		bne	.L87
+ 426:Core/Src/tmp117.c ****       }
+ 427:Core/Src/tmp117.c ****       while (TMP117_set_LowLimit(i2c, 0x80, 0x00) != HAL_OK)
+ 1948              		.loc 1 427 13
+ 1949 009a 02E0     		b	.L88
+ 1950              	.L89:
+ 428:Core/Src/tmp117.c ****       {
+ 429:Core/Src/tmp117.c ****             HAL_Delay(1);
+ 1951              		.loc 1 429 13
+ 1952 009c 0120     		movs	r0, #1
+ 1953 009e FFF7FEFF 		bl	HAL_Delay
+ 1954              	.L88:
+ 427:Core/Src/tmp117.c ****       {
+ 1955              		.loc 1 427 14
+ 1956 00a2 0023     		movs	r3, #0
+ 1957 00a4 1293     		str	r3, [sp, #72]
+ 1958 00a6 8023     		movs	r3, #128
+ 1959 00a8 1193     		str	r3, [sp, #68]
+ 1960 00aa 6846     		mov	r0, sp
+ 1961 00ac 07F11803 		add	r3, r7, #24
+ 1962 00b0 4422     		movs	r2, #68
+ 1963 00b2 1946     		mov	r1, r3
+ 1964 00b4 FFF7FEFF 		bl	memcpy
+ 1965 00b8 07F10803 		add	r3, r7, #8
+ 1966 00bc 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 1967 00be FFF7FEFF 		bl	TMP117_set_LowLimit
+ 1968 00c2 0346     		mov	r3, r0
+ 427:Core/Src/tmp117.c ****       {
+ 1969              		.loc 1 427 13
+ 1970 00c4 002B     		cmp	r3, #0
+ 1971 00c6 E9D1     		bne	.L89
+ 430:Core/Src/tmp117.c ****       }
+ 431:Core/Src/tmp117.c ****       while (TMP117_set_HighLimit(i2c, 0x60, 0x00) != HAL_OK)
+ 1972              		.loc 1 431 13
+ 1973 00c8 02E0     		b	.L90
+ 1974              	.L91:
+ 432:Core/Src/tmp117.c ****       {
+ 433:Core/Src/tmp117.c ****             HAL_Delay(1);
+ 1975              		.loc 1 433 13
+ 1976 00ca 0120     		movs	r0, #1
+ 1977 00cc FFF7FEFF 		bl	HAL_Delay
+ 1978              	.L90:
+ 431:Core/Src/tmp117.c ****       {
+ 1979              		.loc 1 431 14
+ 1980 00d0 0023     		movs	r3, #0
+ 1981 00d2 1293     		str	r3, [sp, #72]
+ 1982 00d4 6023     		movs	r3, #96
+ 1983 00d6 1193     		str	r3, [sp, #68]
+ 1984 00d8 6846     		mov	r0, sp
+ 1985 00da 07F11803 		add	r3, r7, #24
+ 1986 00de 4422     		movs	r2, #68
+ 1987 00e0 1946     		mov	r1, r3
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 43
+
+
+ 1988 00e2 FFF7FEFF 		bl	memcpy
+ 1989 00e6 07F10803 		add	r3, r7, #8
+ 1990 00ea 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 1991 00ec FFF7FEFF 		bl	TMP117_set_HighLimit
+ 1992 00f0 0346     		mov	r3, r0
+ 431:Core/Src/tmp117.c ****       {
+ 1993              		.loc 1 431 13
+ 1994 00f2 002B     		cmp	r3, #0
+ 1995 00f4 E9D1     		bne	.L91
+ 434:Core/Src/tmp117.c ****       }
+ 435:Core/Src/tmp117.c ****       while (TMP117_set_EEPROM_Unlock(i2c, 0x00, 0x00) != HAL_OK)
+ 1996              		.loc 1 435 13
+ 1997 00f6 02E0     		b	.L92
+ 1998              	.L93:
+ 436:Core/Src/tmp117.c ****       {
+ 437:Core/Src/tmp117.c ****             HAL_Delay(1);
+ 1999              		.loc 1 437 13
+ 2000 00f8 0120     		movs	r0, #1
+ 2001 00fa FFF7FEFF 		bl	HAL_Delay
+ 2002              	.L92:
+ 435:Core/Src/tmp117.c ****       {
+ 2003              		.loc 1 435 14
+ 2004 00fe 0023     		movs	r3, #0
+ 2005 0100 1293     		str	r3, [sp, #72]
+ 2006 0102 0023     		movs	r3, #0
+ 2007 0104 1193     		str	r3, [sp, #68]
+ 2008 0106 6846     		mov	r0, sp
+ 2009 0108 07F11803 		add	r3, r7, #24
+ 2010 010c 4422     		movs	r2, #68
+ 2011 010e 1946     		mov	r1, r3
+ 2012 0110 FFF7FEFF 		bl	memcpy
+ 2013 0114 07F10803 		add	r3, r7, #8
+ 2014 0118 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 2015 011a FFF7FEFF 		bl	TMP117_set_EEPROM_Unlock
+ 2016 011e 0346     		mov	r3, r0
+ 435:Core/Src/tmp117.c ****       {
+ 2017              		.loc 1 435 13
+ 2018 0120 002B     		cmp	r3, #0
+ 2019 0122 E9D1     		bne	.L93
+ 438:Core/Src/tmp117.c ****       }
+ 439:Core/Src/tmp117.c **** }...
+ 2020              		.loc 1 439 1
+ 2021 0124 00BF     		nop
+ 2022 0126 00BF     		nop
+ 2023 0128 BD46     		mov	sp, r7
+ 2024              	.LCFI146:
+ 2025              		.cfi_def_cfa_register 13
+ 2026              		@ sp needed
+ 2027 012a BDE88040 		pop	{r7, lr}
+ 2028              	.LCFI147:
+ 2029              		.cfi_restore 14
+ 2030              		.cfi_restore 7
+ 2031              		.cfi_def_cfa_offset 16
+ 2032 012e 04B0     		add	sp, sp, #16
+ 2033              	.LCFI148:
+ 2034              		.cfi_def_cfa_offset 0
+ 2035 0130 7047     		bx	lr
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 44
+
+
+ 2036              		.cfi_endproc
+ 2037              	.LFE84:
+ 2039              		.section	.bss.buf.17,"aw",%nobits
+ 2040              		.align	2
+ 2043              	buf.17:
+ 2044 0000 000000   		.space	3
+ 2045              		.section	.bss.buf.16,"aw",%nobits
+ 2046              		.align	2
+ 2049              	buf.16:
+ 2050 0000 000000   		.space	3
+ 2051              		.section	.bss.buf.15,"aw",%nobits
+ 2052              		.align	2
+ 2055              	buf.15:
+ 2056 0000 000000   		.space	3
+ 2057              		.section	.bss.buf.14,"aw",%nobits
+ 2058              		.align	2
+ 2061              	buf.14:
+ 2062 0000 000000   		.space	3
+ 2063              		.section	.bss.buf.13,"aw",%nobits
+ 2064              		.align	2
+ 2067              	buf.13:
+ 2068 0000 000000   		.space	3
+ 2069              		.section	.bss.buf.12,"aw",%nobits
+ 2070              		.align	2
+ 2073              	buf.12:
+ 2074 0000 000000   		.space	3
+ 2075              		.section	.bss.buf.11,"aw",%nobits
+ 2076              		.align	2
+ 2079              	buf.11:
+ 2080 0000 000000   		.space	3
+ 2081              		.section	.bss.buf.10,"aw",%nobits
+ 2082              		.align	2
+ 2085              	buf.10:
+ 2086 0000 000000   		.space	3
+ 2087              		.section	.bss.buf.9,"aw",%nobits
+ 2088              		.align	2
+ 2091              	buf.9:
+ 2092 0000 000000   		.space	3
+ 2093              		.section	.bss.buf.8,"aw",%nobits
+ 2094              		.align	2
+ 2097              	buf.8:
+ 2098 0000 000000   		.space	3
+ 2099              		.section	.bss.buf.7,"aw",%nobits
+ 2100              		.align	2
+ 2103              	buf.7:
+ 2104 0000 000000   		.space	3
+ 2105              		.section	.bss.buf.6,"aw",%nobits
+ 2106              		.align	2
+ 2109              	buf.6:
+ 2110 0000 000000   		.space	3
+ 2111              		.section	.bss.buf.5,"aw",%nobits
+ 2112              		.align	2
+ 2115              	buf.5:
+ 2116 0000 000000   		.space	3
+ 2117              		.section	.bss.buf.4,"aw",%nobits
+ 2118              		.align	2
+ 2121              	buf.4:
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 45
+
+
+ 2122 0000 000000   		.space	3
+ 2123              		.section	.bss.buf.3,"aw",%nobits
+ 2124              		.align	2
+ 2127              	buf.3:
+ 2128 0000 000000   		.space	3
+ 2129              		.section	.bss.buf.2,"aw",%nobits
+ 2130              		.align	2
+ 2133              	buf.2:
+ 2134 0000 000000   		.space	3
+ 2135              		.section	.bss.buf.1,"aw",%nobits
+ 2136              		.align	2
+ 2139              	buf.1:
+ 2140 0000 000000   		.space	3
+ 2141              		.section	.bss.buf.0,"aw",%nobits
+ 2142              		.align	2
+ 2145              	buf.0:
+ 2146 0000 000000   		.space	3
+ 2147              		.text
+ 2148              	.Letext0:
+ 2149              		.file 2 "c:\\arm-gcc\\tools\\gcc-arm-none-eabi-10-2020-q4-major\\arm-none-eabi\\include\\machine\\
+ 2150              		.file 3 "c:\\arm-gcc\\tools\\gcc-arm-none-eabi-10-2020-q4-major\\arm-none-eabi\\include\\sys\\_std
+ 2151              		.file 4 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 2152              		.file 5 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 2153              		.file 6 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 2154              		.file 7 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h"
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 46
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 tmp117.c
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:19     .data.TMP117_DeviceID:00000000 TMP117_DeviceID
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:26     .text.TMP117_get_Temperature:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:34     .text.TMP117_get_Temperature:00000000 TMP117_get_Temperature
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:190    .text.TMP117_get_Temperature:000000d8 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2043   .bss.buf.17:00000000 buf.17
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:196    .text.TMP117_get_Configuration:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:203    .text.TMP117_get_Configuration:00000000 TMP117_get_Configuration
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:285    .text.TMP117_get_Configuration:00000068 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2049   .bss.buf.16:00000000 buf.16
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:291    .text.TMP117_set_Configuration:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:298    .text.TMP117_set_Configuration:00000000 TMP117_set_Configuration
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:370    .text.TMP117_set_Configuration:00000058 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2055   .bss.buf.15:00000000 buf.15
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:376    .text.TMP117_set_HighLimit:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:383    .text.TMP117_set_HighLimit:00000000 TMP117_set_HighLimit
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:455    .text.TMP117_set_HighLimit:00000058 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2061   .bss.buf.14:00000000 buf.14
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:461    .text.TMP117_get_HighLimit:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:468    .text.TMP117_get_HighLimit:00000000 TMP117_get_HighLimit
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:550    .text.TMP117_get_HighLimit:00000068 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2067   .bss.buf.13:00000000 buf.13
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:556    .text.TMP117_set_LowLimit:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:563    .text.TMP117_set_LowLimit:00000000 TMP117_set_LowLimit
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:635    .text.TMP117_set_LowLimit:00000058 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2073   .bss.buf.12:00000000 buf.12
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:641    .text.TMP117_get_LowLimit:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:648    .text.TMP117_get_LowLimit:00000000 TMP117_get_LowLimit
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:730    .text.TMP117_get_LowLimit:00000068 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2079   .bss.buf.11:00000000 buf.11
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:736    .text.TMP117_get_EEPROM_Unclock:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:743    .text.TMP117_get_EEPROM_Unclock:00000000 TMP117_get_EEPROM_Unclock
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:825    .text.TMP117_get_EEPROM_Unclock:00000068 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2085   .bss.buf.10:00000000 buf.10
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:831    .text.TMP117_set_EEPROM_Unlock:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:838    .text.TMP117_set_EEPROM_Unlock:00000000 TMP117_set_EEPROM_Unlock
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:910    .text.TMP117_set_EEPROM_Unlock:00000058 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2091   .bss.buf.9:00000000 buf.9
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:916    .text.TMP117_set_EEPROM1:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:923    .text.TMP117_set_EEPROM1:00000000 TMP117_set_EEPROM1
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:995    .text.TMP117_set_EEPROM1:00000058 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2097   .bss.buf.8:00000000 buf.8
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1001   .text.TMP117_get_EEPROM1:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1008   .text.TMP117_get_EEPROM1:00000000 TMP117_get_EEPROM1
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1090   .text.TMP117_get_EEPROM1:00000068 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2103   .bss.buf.7:00000000 buf.7
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1096   .text.TMP117_set_EEPROM2:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1103   .text.TMP117_set_EEPROM2:00000000 TMP117_set_EEPROM2
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1175   .text.TMP117_set_EEPROM2:00000058 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2109   .bss.buf.6:00000000 buf.6
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1181   .text.TMP117_get_EEPROM2:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1188   .text.TMP117_get_EEPROM2:00000000 TMP117_get_EEPROM2
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1270   .text.TMP117_get_EEPROM2:00000068 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2115   .bss.buf.5:00000000 buf.5
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1276   .text.TMP117_set_EEPROM3:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1283   .text.TMP117_set_EEPROM3:00000000 TMP117_set_EEPROM3
+ARM GAS  C:\Users\danie\AppData\Local\Temp\cc7htOrY.s 			page 47
+
+
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1355   .text.TMP117_set_EEPROM3:00000058 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2121   .bss.buf.4:00000000 buf.4
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1361   .text.TMP117_get_EEPROM3:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1368   .text.TMP117_get_EEPROM3:00000000 TMP117_get_EEPROM3
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1450   .text.TMP117_get_EEPROM3:00000068 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2127   .bss.buf.3:00000000 buf.3
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1456   .text.TMP117_set_Temperature_Offset:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1463   .text.TMP117_set_Temperature_Offset:00000000 TMP117_set_Temperature_Offset
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1535   .text.TMP117_set_Temperature_Offset:00000058 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2133   .bss.buf.2:00000000 buf.2
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1541   .text.TMP117_get_Temperature_Offset:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1548   .text.TMP117_get_Temperature_Offset:00000000 TMP117_get_Temperature_Offset
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1630   .text.TMP117_get_Temperature_Offset:00000068 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2139   .bss.buf.1:00000000 buf.1
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1636   .text.TMP117_get_ID_Register:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1643   .text.TMP117_get_ID_Register:00000000 TMP117_get_ID_Register
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1725   .text.TMP117_get_ID_Register:00000068 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2145   .bss.buf.0:00000000 buf.0
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1731   .text.TMP117_Initialization:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1738   .text.TMP117_Initialization:00000000 TMP117_Initialization
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1847   .text.TMP117_Initialization_DEFAULT:00000000 $t
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:1854   .text.TMP117_Initialization_DEFAULT:00000000 TMP117_Initialization_DEFAULT
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2040   .bss.buf.17:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2046   .bss.buf.16:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2052   .bss.buf.15:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2058   .bss.buf.14:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2064   .bss.buf.13:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2070   .bss.buf.12:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2076   .bss.buf.11:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2082   .bss.buf.10:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2088   .bss.buf.9:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2094   .bss.buf.8:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2100   .bss.buf.7:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2106   .bss.buf.6:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2112   .bss.buf.5:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2118   .bss.buf.4:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2124   .bss.buf.3:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2130   .bss.buf.2:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2136   .bss.buf.1:00000000 $d
+C:\Users\danie\AppData\Local\Temp\cc7htOrY.s:2142   .bss.buf.0:00000000 $d
+
+UNDEFINED SYMBOLS
+__aeabi_i2d
+__aeabi_dmul
+__aeabi_d2f
+__aeabi_fdiv
+HAL_I2C_Master_Transmit
+HAL_Delay
+HAL_I2C_Master_Receive
+memcpy
